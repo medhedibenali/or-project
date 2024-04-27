@@ -1,0 +1,37 @@
+[
+    {
+        "id": "1",
+        "name": "Product A",
+        "selling_price": "100",
+        "human_work_time": "5",
+        "machine_time": "2",
+        "resources_needed": [
+            {
+                "resource_id": "1",
+                "quantity": "10"
+            },
+            {
+                "resource_id": "2",
+                "quantity": "5"
+            }
+        ]
+    },
+    {
+        "name": "slave",
+        "selling_price": "1",
+        "human_work_time": "100",
+        "machine_time": "0",
+        "resources_needed": [
+            "nothing"
+        ]
+    },
+    {
+        "name": "rouz",
+        "selling_price": "99999999999",
+        "human_work_time": "20",
+        "machine_time": "5",
+        "resources_needed": [
+            "slaves"
+        ]
+    }
+]

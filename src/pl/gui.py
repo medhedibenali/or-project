@@ -3,18 +3,20 @@ import sys
 from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout, QTableWidget, QTableWidgetItem, \
     QPushButton, QHBoxLayout, QLineEdit, QLabel, QTabWidget, QHeaderView
 
+from src.pl.read_files import load_products, load_resources, add_product
+
 
 class MainApp(QMainWindow):
     def __init__(self):
         super().__init__()
+        self.product_columns = ['Name', 'Selling Price', 'Human Work Time', 'Machine Time', 'Resources Needed']
+        self.products = load_products()
+        self.resources = load_resources()
+
         self.setWindowTitle('Dynamic Production Planner')
         self.setGeometry(100, 100, 1000, 600)
         self.tab_widget = QTabWidget()
         self.setCentralWidget(self.tab_widget)
-        # self.layout = QVBoxLayout()
-        # self.central_widget.setLayout(self.layout)
-        # self.setup_product_table()
-        # self.setup_product_form()
 
         # Create tabs
         self.product_management_tab = QWidget()
@@ -25,6 +27,43 @@ class MainApp(QMainWindow):
         # Initialize UI Components for Each Tab
         self.setup_product_management_tab()
         self.setup_resource_management_tab()
+        self.load_data_into_ui()
+
+    def load_data_into_ui(self):
+        self.products = load_products()
+        self.resources = load_resources()
+
+        # Clear existing rows in the tables
+        self.product_table.setRowCount(0)
+        self.resource_table.setRowCount(0)
+
+        # Populate product table
+        for product in self.products:
+            self.add_product_to_table(product)
+
+        # Populate resource table
+        for resource in self.resources:
+            self.add_resource_to_table(resource)
+
+    def add_product_to_table(self, product):
+        row_position = self.product_table.rowCount()
+        self.product_table.insertRow(row_position)
+        print(product)
+        # Assuming product dictionary has keys corresponding to table columns
+        self.product_table.setItem(row_position, 0, QTableWidgetItem(product['name']))
+        self.product_table.setItem(row_position, 1, QTableWidgetItem(product['selling_price']))
+        self.product_table.setItem(row_position, 2, QTableWidgetItem(product['human_work_time']))
+        self.product_table.setItem(row_position, 3, QTableWidgetItem(product['machine_time']))
+        # self.product_table.setItem(row_position, 4, QTableWidgetItem(product['resources_needed']))
+
+    def add_resource_to_table(self, resource):
+        row_position = self.resource_table.rowCount()
+        self.resource_table.insertRow(row_position)
+        # Assuming resource dictionary has keys corresponding to table columns
+        self.resource_table.setItem(row_position, 0,
+                                    QTableWidgetItem(resource['name']))
+        self.resource_table.setItem(row_position, 1,
+                                    QTableWidgetItem(resource['quantity_available']))
 
     def setup_product_management_tab(self):
         self.product_management_layout = QVBoxLayout(self.product_management_tab)
@@ -33,9 +72,8 @@ class MainApp(QMainWindow):
 
     def setup_product_table(self):
         self.product_table = QTableWidget()
-        self.product_table.setColumnCount(5)
-        self.product_table.setHorizontalHeaderLabels(
-            ['Name', 'Selling Price', 'Human Work Time', 'Machine Time', 'Resources Needed'])
+        self.product_table.setColumnCount(len(self.product_columns))
+        self.product_table.setHorizontalHeaderLabels(self.product_columns)
         self.product_table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
         self.product_management_layout.addWidget(self.product_table)
 
@@ -88,7 +126,7 @@ class MainApp(QMainWindow):
 
     def setup_resource_table(self):
         self.resource_table = QTableWidget()
-        self.resource_table.setColumnCount(2)  # Adjust based on attributes
+        self.resource_table.setColumnCount(2)
         self.resource_table.setHorizontalHeaderLabels(['Resource Name', 'Quantity Available'])
         self.resource_management_layout.addWidget(self.resource_table)
 
@@ -113,7 +151,22 @@ class MainApp(QMainWindow):
         self.delete_resource_button.clicked.connect(self.delete_resource)
         self.resource_management_layout.addWidget(self.delete_resource_button)
 
-        # Additional functions for adding and deleting resources go here
+    def load_data_into_ui(self):
+        self.products = load_products()
+        self.resources = load_resources()
+        print(self.products)
+
+        # Clear existing rows in the tables
+        self.product_table.setRowCount(0)
+        self.resource_table.setRowCount(0)
+
+        # Populate product table
+        for product in self.products:
+            self.add_product_to_table(product)
+
+        # Populate resource table
+        for resource in self.resources:
+            self.add_resource_to_table(resource)
 
     def add_product(self):
         row_position = self.product_table.rowCount()
@@ -124,6 +177,13 @@ class MainApp(QMainWindow):
         self.product_table.setItem(row_position, 2, QTableWidgetItem(self.human_work_time_input.text()))
         self.product_table.setItem(row_position, 3, QTableWidgetItem(self.machine_time_input.text()))
         self.product_table.setItem(row_position, 4, QTableWidgetItem(self.resources_needed_input.text()))
+
+        new_product = {"name": self.name_input.text(), "selling_price": self.selling_price_input.text(),
+            "human_work_time": self.human_work_time_input.text(), "machine_time": self.machine_time_input.text(),
+            # You will likely need to handle this appropriately depending on the structure
+            # For example, converting "1,2,3" into a list ["1", "2", "3"]
+            "resources_needed": self.resources_needed_input.text().split(',')}
+        add_product(new_product)
 
         # Clear input fields after adding
         self.name_input.clear()
@@ -152,7 +212,7 @@ class MainApp(QMainWindow):
             self.product_table.removeRow(index.row())
 
     def optimize_production_plan(self):
-        # Here you will collect data from the table and use Gurobi for optimization.
+        # Here we will collect data from the table and use Gurobi for optimization.
         # This function currently serves as a placeholder.
         print("Optimization placeholder. This is where the Gurobi optimization logic will be implemented.")
 

@@ -1,0 +1,12 @@
+[
+  {
+    "id": "1",
+    "name": "Resource 1",
+    "quantity_available": "100"
+  },
+  {
+    "id": "2",
+    "name": "Resource 2",
+    "quantity_available": "200"
+  }
+]
