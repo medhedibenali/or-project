@@ -1,17 +1,16 @@
 [
     {
-        "id": "1",
         "name": "Product A",
         "selling_price": "100",
         "human_work_time": "5",
         "machine_time": "2",
         "resources_needed": [
             {
-                "resource_id": "1",
+                "name": "Resource 1",
                 "quantity": "10"
             },
             {
-                "resource_id": "2",
+                "name": "Resource 2",
                 "quantity": "5"
             }
         ]
