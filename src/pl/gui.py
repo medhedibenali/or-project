@@ -31,11 +31,11 @@ class MainApp(QMainWindow):
         self.setup_product_table()
         self.setup_product_form()
 
-    def setup_product_table(self):  # Accept the layout as a parameter
+    def setup_product_table(self):
         self.product_table = QTableWidget()
-        self.product_table.setColumnCount(6)  # Example setup
+        self.product_table.setColumnCount(5)
         self.product_table.setHorizontalHeaderLabels(
-            ['Name', 'Selling Price', 'Cost', 'Human Work Time', 'Machine Time', 'Resources Needed'])
+            ['Name', 'Selling Price', 'Human Work Time', 'Machine Time', 'Resources Needed'])
         self.product_table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
         self.product_management_layout.addWidget(self.product_table)
 
@@ -62,9 +62,6 @@ class MainApp(QMainWindow):
 
         self.product_form_layout.addWidget(QLabel('Selling Price:'))
         self.product_form_layout.addWidget(self.selling_price_input)
-
-        self.product_form_layout.addWidget(QLabel('Cost:'))
-        self.product_form_layout.addWidget(self.cost_input)
 
         self.product_form_layout.addWidget(QLabel('Human Work Time:'))
         self.product_form_layout.addWidget(self.human_work_time_input)
@@ -124,10 +121,9 @@ class MainApp(QMainWindow):
 
         self.product_table.setItem(row_position, 0, QTableWidgetItem(self.name_input.text()))
         self.product_table.setItem(row_position, 1, QTableWidgetItem(self.selling_price_input.text()))
-        self.product_table.setItem(row_position, 2, QTableWidgetItem(self.cost_input.text()))
-        self.product_table.setItem(row_position, 3, QTableWidgetItem(self.human_work_time_input.text()))
-        self.product_table.setItem(row_position, 4, QTableWidgetItem(self.machine_time_input.text()))
-        self.product_table.setItem(row_position, 5, QTableWidgetItem(self.resources_needed_input.text()))
+        self.product_table.setItem(row_position, 2, QTableWidgetItem(self.human_work_time_input.text()))
+        self.product_table.setItem(row_position, 3, QTableWidgetItem(self.machine_time_input.text()))
+        self.product_table.setItem(row_position, 4, QTableWidgetItem(self.resources_needed_input.text()))
 
         # Clear input fields after adding
         self.name_input.clear()
