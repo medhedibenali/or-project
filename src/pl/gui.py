@@ -29,22 +29,6 @@ class MainApp(QMainWindow):
         self.setup_resource_management_tab()
         self.load_data_into_ui()
 
-    def load_data_into_ui(self):
-        self.products = load_products()
-        self.resources = load_resources()
-
-        # Clear existing rows in the tables
-        self.product_table.setRowCount(0)
-        self.resource_table.setRowCount(0)
-
-        # Populate product table
-        for product in self.products:
-            self.add_product_to_table(product)
-
-        # Populate resource table
-        for resource in self.resources:
-            self.add_resource_to_table(resource)
-
     def add_product_to_table(self, product):
         row_position = self.product_table.rowCount()
         self.product_table.insertRow(row_position)
@@ -159,7 +143,6 @@ class MainApp(QMainWindow):
         # Clear existing rows in the tables
         self.product_table.setRowCount(0)
         self.resource_table.setRowCount(0)
-
         # Populate product table
         for product in self.products:
             self.add_product_to_table(product)
@@ -179,10 +162,10 @@ class MainApp(QMainWindow):
         self.product_table.setItem(row_position, 4, QTableWidgetItem(self.resources_needed_input.text()))
 
         new_product = {"name": self.name_input.text(), "selling_price": self.selling_price_input.text(),
-            "human_work_time": self.human_work_time_input.text(), "machine_time": self.machine_time_input.text(),
-            # You will likely need to handle this appropriately depending on the structure
-            # For example, converting "1,2,3" into a list ["1", "2", "3"]
-            "resources_needed": self.resources_needed_input.text().split(',')}
+                       "human_work_time": self.human_work_time_input.text(),
+                       "machine_time": self.machine_time_input.text(),
+                       # TODO: Change this to properly handle the different resources and their quantities
+                       "resources_needed": self.resources_needed_input.text().split(',')}
         add_product(new_product)
 
         # Clear input fields after adding

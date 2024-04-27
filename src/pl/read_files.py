@@ -25,11 +25,11 @@ def add_data_item(file_path, new_item):
 
 
 def load_products():
-    load_json_data(PRODUCTS_FILE_PATH)
+    return load_json_data(PRODUCTS_FILE_PATH)
 
 
 def load_resources():
-    load_json_data(RESOURCES_FILE_PATH)
+    return load_json_data(RESOURCES_FILE_PATH)
 
 
 def add_product(new_product):

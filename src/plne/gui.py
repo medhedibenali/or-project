@@ -1,8 +1,9 @@
 import sys
 
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QLineEdit, QPushButton, QVBoxLayout, QWidget, QHBoxLayout, QScrollArea
-from PyQt5.QtGui import QFont, QColor
+from PyQt5.QtGui import QFont
+from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QLineEdit, QPushButton, QVBoxLayout, QWidget, \
+    QHBoxLayout, QScrollArea
 
 
 class NodePairWidget(QWidget):
@@ -17,7 +18,8 @@ class NodePairWidget(QWidget):
         self.node1_input.setFont(QFont(FONT_TYPE, 12))
         layout.addWidget(self.node1_label)
         layout.addWidget(self.node1_input)
-        self.node1_input.setStyleSheet("border: none; background-color: %s; border-radius: 5px; margin: 0 8px 0 4px;" % LIGHT_BG_COLOR)
+        self.node1_input.setStyleSheet(
+            "border: none; background-color: %s; border-radius: 5px; margin: 0 8px 0 4px;" % LIGHT_BG_COLOR)
         self.node1_label.setStyleSheet("color: %s" % LABEL_COLOR)
 
         self.node2_label = QLabel("Node 2:")
@@ -26,7 +28,8 @@ class NodePairWidget(QWidget):
         self.node2_input.setFont(QFont(FONT_TYPE, 12))
         layout.addWidget(self.node2_label)
         layout.addWidget(self.node2_input)
-        self.node2_input.setStyleSheet("border: none; background-color: %s; border-radius: 5px; margin: 0 8px 0 4px;" % LIGHT_BG_COLOR)
+        self.node2_input.setStyleSheet(
+            "border: none; background-color: %s; border-radius: 5px; margin: 0 8px 0 4px;" % LIGHT_BG_COLOR)
         self.node2_label.setStyleSheet("color: %s" % LABEL_COLOR)
 
         self.cost_label = QLabel("Cost:")
@@ -35,11 +38,14 @@ class NodePairWidget(QWidget):
         self.cost_input.setFont(QFont(FONT_TYPE, 12))
         layout.addWidget(self.cost_label)
         layout.addWidget(self.cost_input)
-        self.cost_input.setStyleSheet("border: none; background-color: %s; border-radius: 5px; margin: 0 8px 0 4px;" % LIGHT_BG_COLOR)
+        self.cost_input.setStyleSheet(
+            "border: none; background-color: %s; border-radius: 5px; margin: 0 8px 0 4px;" % LIGHT_BG_COLOR)
         self.cost_label.setStyleSheet("color: %s;" % LABEL_COLOR)
 
         self.remove_button = QPushButton("Remove")
-        self.remove_button.setStyleSheet("font-size: 12px; background-color: %s; color: %s; border: none; padding: 5px 10px; border-radius: 5px; margin: 0 16px;" % (REMOVE_BUTTON_COLOR, BUTTON_TEXT_COLOR))
+        self.remove_button.setStyleSheet(
+            "font-size: 12px; background-color: %s; color: %s; border: none; padding: 5px 10px; border-radius: 5px; margin: 0 16px;" % (
+            REMOVE_BUTTON_COLOR, BUTTON_TEXT_COLOR))
         layout.addWidget(self.remove_button)
 
         self.setLayout(layout)
@@ -63,7 +69,8 @@ class MainWindow(QMainWindow):
         layout.addWidget(self.source_label)
         layout.addWidget(self.source_input)
         self.source_label.setStyleSheet("color: %s;" % BIG_LABEL_COLOR)
-        self.source_input.setStyleSheet("border: none; background-color: %s; border-radius: 5px; color: %s;" % ( NODE_PAIR_BACKGROUND_COLOR, INPUT_TEXT_COLOR))
+        self.source_input.setStyleSheet("border: none; background-color: %s; border-radius: 5px; color: %s;" % (
+        NODE_PAIR_BACKGROUND_COLOR, INPUT_TEXT_COLOR))
 
         self.dest_label = QLabel("Destination Node:")
         self.dest_input = QLineEdit()
@@ -73,7 +80,8 @@ class MainWindow(QMainWindow):
         layout.addWidget(self.dest_label)
         layout.addWidget(self.dest_input)
         self.dest_label.setStyleSheet("color: %s;" % BIG_LABEL_COLOR)
-        self.dest_input.setStyleSheet("border: none; background-color: %s; border-radius: 5px;  color: %s;" % (NODE_PAIR_BACKGROUND_COLOR, INPUT_TEXT_COLOR))
+        self.dest_input.setStyleSheet("border: none; background-color: %s; border-radius: 5px;  color: %s;" % (
+        NODE_PAIR_BACKGROUND_COLOR, INPUT_TEXT_COLOR))
 
         self.node_pairs_label = QLabel("Node Pairs and Costs:")
         self.node_pairs_label.setFont(QFont(FONT_TYPE, 14))
@@ -104,11 +112,15 @@ class MainWindow(QMainWindow):
         layout.addWidget(scroll_area)
 
         self.add_node_pair_button = QPushButton("+ Add Node Pair")
-        self.add_node_pair_button.setStyleSheet("font-size: 14px; background-color: %s; color: %s; border: none; padding: 10px 20px; border-radius: 5px;" % (ADD_BUTTON_COLOR, BUTTON_TEXT_COLOR))
+        self.add_node_pair_button.setStyleSheet(
+            "font-size: 14px; background-color: %s; color: %s; border: none; padding: 10px 20px; border-radius: 5px;" % (
+            ADD_BUTTON_COLOR, BUTTON_TEXT_COLOR))
         layout.addWidget(self.add_node_pair_button)
 
         self.calculate_button = QPushButton("Calculate Shortest Path")
-        self.calculate_button.setStyleSheet("font-size: 14px; background-color: %s; color: %s; border: none; padding: 10px 20px; border-radius: 5px;" % (CALCULATE_BUTTON_COLOR, BUTTON_TEXT_COLOR))
+        self.calculate_button.setStyleSheet(
+            "font-size: 14px; background-color: %s; color: %s; border: none; padding: 10px 20px; border-radius: 5px;" % (
+            CALCULATE_BUTTON_COLOR, BUTTON_TEXT_COLOR))
         layout.addWidget(self.calculate_button)
 
         self.node_pair_inputs = []

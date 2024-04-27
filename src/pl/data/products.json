@@ -14,23 +14,5 @@
                 "quantity": "5"
             }
         ]
-    },
-    {
-        "name": "slave",
-        "selling_price": "1",
-        "human_work_time": "100",
-        "machine_time": "0",
-        "resources_needed": [
-            "nothing"
-        ]
-    },
-    {
-        "name": "rouz",
-        "selling_price": "99999999999",
-        "human_work_time": "20",
-        "machine_time": "5",
-        "resources_needed": [
-            "slaves"
-        ]
     }
 ]
