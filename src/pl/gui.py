@@ -1,6 +1,7 @@
 import sys
 
-from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout, QTableWidget, QTableWidgetItem, QPushButton, QHBoxLayout, QLineEdit, QLabel, QTabWidget
+from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout, QTableWidget, QTableWidgetItem, \
+    QPushButton, QHBoxLayout, QLineEdit, QLabel, QTabWidget, QHeaderView
 
 
 class MainApp(QMainWindow):
@@ -26,19 +27,17 @@ class MainApp(QMainWindow):
         self.setup_resource_management_tab()
 
     def setup_product_management_tab(self):
-        # Creating a layout for the product_management_tab
-        product_management_layout = QVBoxLayout()
-        self.product_management_tab.setLayout(product_management_layout)  # Set this layout on the tab
+        self.product_management_layout = QVBoxLayout(self.product_management_tab)
+        self.setup_product_table()
+        self.setup_product_form()
 
-        self.setup_product_table(product_management_layout)  # Pass the layout to the method
-
-    def setup_product_table(self, layout):  # Accept the layout as a parameter
+    def setup_product_table(self):  # Accept the layout as a parameter
         self.product_table = QTableWidget()
         self.product_table.setColumnCount(6)  # Example setup
         self.product_table.setHorizontalHeaderLabels(
             ['Name', 'Selling Price', 'Cost', 'Human Work Time', 'Machine Time', 'Resources Needed'])
-
-        layout.addWidget(self.product_table)  # Use the passed layout here
+        self.product_table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        self.product_management_layout.addWidget(self.product_table)
 
     def setup_resource_management_tab(self):
         self.resource_management_layout = QVBoxLayout(self.resource_management_tab)
@@ -47,8 +46,8 @@ class MainApp(QMainWindow):
 
     def setup_product_form(self):
         # Form layout
-        self.form_layout = QHBoxLayout()
-        self.layout.addLayout(self.form_layout)
+        self.product_form_layout = QHBoxLayout()
+        self.product_management_layout.addLayout(self.product_form_layout)
 
         # Form fields
         self.name_input = QLineEdit()
@@ -58,37 +57,37 @@ class MainApp(QMainWindow):
         self.machine_time_input = QLineEdit()
         self.resources_needed_input = QLineEdit()
 
-        self.form_layout.addWidget(QLabel('Name:'))
-        self.form_layout.addWidget(self.name_input)
+        self.product_form_layout.addWidget(QLabel('Name:'))
+        self.product_form_layout.addWidget(self.name_input)
 
-        self.form_layout.addWidget(QLabel('Selling Price:'))
-        self.form_layout.addWidget(self.selling_price_input)
+        self.product_form_layout.addWidget(QLabel('Selling Price:'))
+        self.product_form_layout.addWidget(self.selling_price_input)
 
-        self.form_layout.addWidget(QLabel('Cost:'))
-        self.form_layout.addWidget(self.cost_input)
+        self.product_form_layout.addWidget(QLabel('Cost:'))
+        self.product_form_layout.addWidget(self.cost_input)
 
-        self.form_layout.addWidget(QLabel('Human Work Time:'))
-        self.form_layout.addWidget(self.human_work_time_input)
+        self.product_form_layout.addWidget(QLabel('Human Work Time:'))
+        self.product_form_layout.addWidget(self.human_work_time_input)
 
-        self.form_layout.addWidget(QLabel('Machine Time:'))
-        self.form_layout.addWidget(self.machine_time_input)
+        self.product_form_layout.addWidget(QLabel('Machine Time:'))
+        self.product_form_layout.addWidget(self.machine_time_input)
 
-        self.form_layout.addWidget(QLabel('Resources Needed:'))
-        self.form_layout.addWidget(self.resources_needed_input)
+        self.product_form_layout.addWidget(QLabel('Resources Needed:'))
+        self.product_form_layout.addWidget(self.resources_needed_input)
 
         # Add and Delete buttons
         self.add_button = QPushButton('Add Product')
         self.add_button.clicked.connect(self.add_product)
-        self.layout.addWidget(self.add_button)
+        self.product_management_layout.addWidget(self.add_button)
 
         self.delete_button = QPushButton('Delete Selected Product')
         self.delete_button.clicked.connect(self.delete_product)
-        self.layout.addWidget(self.delete_button)
+        self.product_management_layout.addWidget(self.delete_button)
 
         # Placeholder for Optimization button (Gurobi integration)
         self.optimize_button = QPushButton('Optimize Production Plan')
         self.optimize_button.clicked.connect(self.optimize_production_plan)
-        self.layout.addWidget(self.optimize_button)
+        self.product_management_layout.addWidget(self.optimize_button)
 
     def setup_resource_table(self):
         self.resource_table = QTableWidget()
