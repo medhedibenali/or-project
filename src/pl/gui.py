@@ -1,18 +1,19 @@
 import sys
 
 from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout, QTableWidget, QTableWidgetItem, \
-    QPushButton, QHBoxLayout, QLineEdit, QLabel, QTabWidget, QHeaderView
+    QPushButton, QHBoxLayout, QLineEdit, QLabel, QTabWidget, QHeaderView, QDialog
 
-from src.pl.read_files import load_products, load_resources, add_product
+from src.pl.ResourceManagementDialog import ResourceManagementDialog
+from src.pl.read_files import load_products, load_resources, add_product, add_resource
 
 
 class MainApp(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.product_columns = ['Name', 'Selling Price', 'Human Work Time', 'Machine Time', 'Resources Needed']
+        self.product_columns = ['Name', 'Selling Price', 'Human Work Time', 'Machine Time']
         self.products = load_products()
         self.resources = load_resources()
-
+        self.current_product = None
         self.setWindowTitle('Dynamic Production Planner')
         self.setGeometry(100, 100, 1000, 600)
         self.tab_widget = QTabWidget()
@@ -38,16 +39,13 @@ class MainApp(QMainWindow):
         self.product_table.setItem(row_position, 1, QTableWidgetItem(product['selling_price']))
         self.product_table.setItem(row_position, 2, QTableWidgetItem(product['human_work_time']))
         self.product_table.setItem(row_position, 3, QTableWidgetItem(product['machine_time']))
-        # self.product_table.setItem(row_position, 4, QTableWidgetItem(product['resources_needed']))
 
     def add_resource_to_table(self, resource):
         row_position = self.resource_table.rowCount()
         self.resource_table.insertRow(row_position)
         # Assuming resource dictionary has keys corresponding to table columns
-        self.resource_table.setItem(row_position, 0,
-                                    QTableWidgetItem(resource['name']))
-        self.resource_table.setItem(row_position, 1,
-                                    QTableWidgetItem(resource['quantity_available']))
+        self.resource_table.setItem(row_position, 0, QTableWidgetItem(resource['name']))
+        self.resource_table.setItem(row_position, 1, QTableWidgetItem(resource['quantity_available']))
 
     def setup_product_management_tab(self):
         self.product_management_layout = QVBoxLayout(self.product_management_tab)
@@ -91,8 +89,9 @@ class MainApp(QMainWindow):
         self.product_form_layout.addWidget(QLabel('Machine Time:'))
         self.product_form_layout.addWidget(self.machine_time_input)
 
-        self.product_form_layout.addWidget(QLabel('Resources Needed:'))
-        self.product_form_layout.addWidget(self.resources_needed_input)
+        self.manage_resources_btn = QPushButton('Manage Resources')
+        self.manage_resources_btn.clicked.connect(self.manage_product_resources)
+        self.product_form_layout.addWidget(self.manage_resources_btn)
 
         # Add and Delete buttons
         self.add_button = QPushButton('Add Product')
@@ -113,6 +112,17 @@ class MainApp(QMainWindow):
         self.resource_table.setColumnCount(2)
         self.resource_table.setHorizontalHeaderLabels(['Resource Name', 'Quantity Available'])
         self.resource_management_layout.addWidget(self.resource_table)
+
+    def manage_product_resources(self):
+        self.current_product = {"name": self.name_input.text(), "selling_price": self.selling_price_input.text(),
+                                "human_work_time": self.human_work_time_input.text(),
+                                "machine_time": self.machine_time_input.text(), "resources_needed": []}
+        add_product(self.current_product)
+        self.resources = load_resources()
+        dialog = ResourceManagementDialog(self.resources, self.current_product)
+        if dialog.exec_() == QDialog.Accepted:
+            # Gather data from dialog and update the product being added/edited
+            pass  # Example: update product['resources_needed'] based on dialog inputs
 
     def setup_resource_form(self):
         self.resource_form_layout = QHBoxLayout()
@@ -165,8 +175,10 @@ class MainApp(QMainWindow):
                        "human_work_time": self.human_work_time_input.text(),
                        "machine_time": self.machine_time_input.text(),
                        # TODO: Change this to properly handle the different resources and their quantities
-                       "resources_needed": self.resources_needed_input.text().split(',')}
-        add_product(new_product)
+                       # "resources_needed": self.resources_needed_input.text().split(',')
+                       }
+        # TODO: We removed this to prevent the product being saved twice (here and when adding ressources). See if there's a better way
+        # add_product(new_product)
 
         # Clear input fields after adding
         self.name_input.clear()
@@ -181,6 +193,10 @@ class MainApp(QMainWindow):
         self.resource_table.insertRow(row_position)
         self.resource_table.setItem(row_position, 0, QTableWidgetItem(self.resource_name_input.text()))
         self.resource_table.setItem(row_position, 1, QTableWidgetItem(self.quantity_available_input.text()))
+
+        new_resource = {"name": self.resource_name_input.text(),
+                        "quantity_available": self.quantity_available_input.text()}
+        add_resource(new_resource)
         self.resource_name_input.clear()
         self.quantity_available_input.clear()
 

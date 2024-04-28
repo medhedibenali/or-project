@@ -1,10 +1,26 @@
 [
-  {
-    "name": "Resource 1",
-    "quantity_available": "100"
-  },
-  {
-    "name": "Resource 2",
-    "quantity_available": "200"
-  }
+    {
+        "name": "Resource 1",
+        "quantity_available": "100"
+    },
+    {
+        "name": "Resource 2",
+        "quantity_available": "200"
+    },
+    {
+        "name": "hdid",
+        "quantity_available": "20"
+    },
+    {
+        "name": "bois",
+        "quantity_available": "99"
+    },
+    {
+        "name": "chleka",
+        "quantity_available": "9999"
+    },
+    {
+        "name": "resource_tefha",
+        "quantity_available": "10"
+    }
 ]
