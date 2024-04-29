@@ -1,5 +1,7 @@
 import sys
 
+from optimizer import PlneOptimizer, InitializationException, OptimizationException
+
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QFont
 from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QLineEdit, QPushButton, QVBoxLayout, QWidget, \
@@ -162,6 +164,32 @@ class MainWindow(QMainWindow):
         for node1, node2, cost in node_pairs:
             print("Node 1:", node1, "| Node 2:", node2, "| Cost:", cost)
 
+        try:
+            optimizer = PlneOptimizer(source, dest, node_pairs)
+
+            objective_value, edges, nodes = optimizer.optimize()
+            print("\nobjective value: ", objective_value)
+
+            output = f"{edges[0]}"
+
+            print("\nedges")
+            for i in range(1, len(edges)):
+                output = f"{output} -> {edges[i]}"
+
+            print(output)
+
+            output = f"{nodes[0]}"
+
+            print("\nnodes")
+            for i in range(1, len(nodes)):
+                output = f"{output} -> {nodes[i]}"
+
+            print(output)
+
+        except InitializationException as e:
+            print(e, e.location)
+        except OptimizationException as e:
+            print(e)
 
 # Define colors and font type
 REMOVE_BUTTON_COLOR = "#572287"
