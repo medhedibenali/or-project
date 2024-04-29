@@ -1,4 +1,12 @@
-from PyQt5.QtWidgets import QDialog, QVBoxLayout, QTableWidget, QPushButton, QHBoxLayout, QComboBox, QLineEdit
+from PyQt5.QtWidgets import (
+    QDialog,
+    QVBoxLayout,
+    QTableWidget,
+    QPushButton,
+    QHBoxLayout,
+    QComboBox,
+    QLineEdit,
+)
 
 from src.pl.read_files import add_resource_to_product
 
@@ -16,18 +24,20 @@ class ResourceManagementDialog(QDialog):
         # Table for adding/removing resources and specifying quantities
         self.resources_table = QTableWidget()
         self.resources_table.setColumnCount(3)
-        self.resources_table.setHorizontalHeaderLabels(['Resource', 'Quantity', 'Remove'])
+        self.resources_table.setHorizontalHeaderLabels(
+            ["Resource", "Quantity", "Remove"]
+        )
         layout.addWidget(self.resources_table)
 
         # Button to add a new row to specify a resource
-        add_resource_btn = QPushButton('Add Resource')
+        add_resource_btn = QPushButton("Add Resource")
         add_resource_btn.clicked.connect(self.add_resource_row)
         layout.addWidget(add_resource_btn)
 
         # OK and Cancel buttons
-        ok_btn = QPushButton('OK')
+        ok_btn = QPushButton("OK")
         ok_btn.clicked.connect(self.apply_changes)
-        cancel_btn = QPushButton('Cancel')
+        cancel_btn = QPushButton("Cancel")
         cancel_btn.clicked.connect(self.reject)
 
         button_layout = QHBoxLayout()
@@ -39,7 +49,7 @@ class ResourceManagementDialog(QDialog):
         print("clicked")
         if self.current_product is not None:
             # Clear existing resources needed for fresh input
-            self.current_product['resources_needed'] = []
+            self.current_product["resources_needed"] = []
             for row in range(self.resources_table.rowCount()):
                 resource_combo = self.resources_table.cellWidget(row, 0)
                 qty_input = self.resources_table.cellWidget(row, 1)
@@ -48,8 +58,12 @@ class ResourceManagementDialog(QDialog):
                 quantity = qty_input.text()
 
                 # Append new resource data to the product's resources_needed
-                add_resource_to_product(self.current_product['name'], resource_name, quantity)
-                print(self.current_product)  # add_product(self.current_product)  # Save the entire updated product list
+                add_resource_to_product(
+                    self.current_product["name"], resource_name, quantity
+                )
+                print(
+                    self.current_product
+                )  # add_product(self.current_product)  # Save the entire updated product list
 
         self.accept()  # Close the dialog
 
@@ -59,7 +73,7 @@ class ResourceManagementDialog(QDialog):
 
         combo_box = QComboBox()
         for resource in self.available_resources:
-            combo_box.addItem(resource['name'], resource)
+            combo_box.addItem(resource["name"], resource)
 
         qty_input = QLineEdit()
         remove_btn = QPushButton("Remove")
@@ -81,6 +95,6 @@ class ResourceManagementDialog(QDialog):
             resource = self.available_resources[resource_combo.currentIndex()]
             quantity = qty_input.text()  # You might want to validate this input
 
-            resource_data.append({'resource_id': resource['id'], 'quantity': quantity})
+            resource_data.append({"resource_id": resource["id"], "quantity": quantity})
             print(resource_data, resource)
         return resource_data

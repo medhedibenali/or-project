@@ -1,7 +1,20 @@
 import sys
 
-from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout, QTableWidget, QTableWidgetItem, \
-    QPushButton, QHBoxLayout, QLineEdit, QLabel, QTabWidget, QHeaderView, QDialog
+from PyQt5.QtWidgets import (
+    QApplication,
+    QMainWindow,
+    QWidget,
+    QVBoxLayout,
+    QTableWidget,
+    QTableWidgetItem,
+    QPushButton,
+    QHBoxLayout,
+    QLineEdit,
+    QLabel,
+    QTabWidget,
+    QHeaderView,
+    QDialog,
+)
 
 from src.pl.ResourceManagementDialog import ResourceManagementDialog
 from src.pl.read_files import load_products, load_resources, add_product, add_resource
@@ -10,11 +23,16 @@ from src.pl.read_files import load_products, load_resources, add_product, add_re
 class MainApp(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.product_columns = ['Name', 'Selling Price', 'Human Work Time', 'Machine Time']
+        self.product_columns = [
+            "Name",
+            "Selling Price",
+            "Human Work Time",
+            "Machine Time",
+        ]
         self.products = load_products()
         self.resources = load_resources()
         self.current_product = None
-        self.setWindowTitle('Dynamic Production Planner')
+        self.setWindowTitle("Dynamic Production Planner")
         self.setGeometry(100, 100, 1000, 600)
         self.tab_widget = QTabWidget()
         self.setCentralWidget(self.tab_widget)
@@ -35,17 +53,25 @@ class MainApp(QMainWindow):
         self.product_table.insertRow(row_position)
         print(product)
         # Assuming product dictionary has keys corresponding to table columns
-        self.product_table.setItem(row_position, 0, QTableWidgetItem(product['name']))
-        self.product_table.setItem(row_position, 1, QTableWidgetItem(product['selling_price']))
-        self.product_table.setItem(row_position, 2, QTableWidgetItem(product['human_work_time']))
-        self.product_table.setItem(row_position, 3, QTableWidgetItem(product['machine_time']))
+        self.product_table.setItem(row_position, 0, QTableWidgetItem(product["name"]))
+        self.product_table.setItem(
+            row_position, 1, QTableWidgetItem(product["selling_price"])
+        )
+        self.product_table.setItem(
+            row_position, 2, QTableWidgetItem(product["human_work_time"])
+        )
+        self.product_table.setItem(
+            row_position, 3, QTableWidgetItem(product["machine_time"])
+        )
 
     def add_resource_to_table(self, resource):
         row_position = self.resource_table.rowCount()
         self.resource_table.insertRow(row_position)
         # Assuming resource dictionary has keys corresponding to table columns
-        self.resource_table.setItem(row_position, 0, QTableWidgetItem(resource['name']))
-        self.resource_table.setItem(row_position, 1, QTableWidgetItem(resource['quantity_available']))
+        self.resource_table.setItem(row_position, 0, QTableWidgetItem(resource["name"]))
+        self.resource_table.setItem(
+            row_position, 1, QTableWidgetItem(resource["quantity_available"])
+        )
 
     def setup_product_management_tab(self):
         self.product_management_layout = QVBoxLayout(self.product_management_tab)
@@ -77,46 +103,52 @@ class MainApp(QMainWindow):
         self.machine_time_input = QLineEdit()
         self.resources_needed_input = QLineEdit()
 
-        self.product_form_layout.addWidget(QLabel('Name:'))
+        self.product_form_layout.addWidget(QLabel("Name:"))
         self.product_form_layout.addWidget(self.name_input)
 
-        self.product_form_layout.addWidget(QLabel('Selling Price:'))
+        self.product_form_layout.addWidget(QLabel("Selling Price:"))
         self.product_form_layout.addWidget(self.selling_price_input)
 
-        self.product_form_layout.addWidget(QLabel('Human Work Time:'))
+        self.product_form_layout.addWidget(QLabel("Human Work Time:"))
         self.product_form_layout.addWidget(self.human_work_time_input)
 
-        self.product_form_layout.addWidget(QLabel('Machine Time:'))
+        self.product_form_layout.addWidget(QLabel("Machine Time:"))
         self.product_form_layout.addWidget(self.machine_time_input)
 
-        self.manage_resources_btn = QPushButton('Manage Resources')
+        self.manage_resources_btn = QPushButton("Manage Resources")
         self.manage_resources_btn.clicked.connect(self.manage_product_resources)
         self.product_form_layout.addWidget(self.manage_resources_btn)
 
         # Add and Delete buttons
-        self.add_button = QPushButton('Add Product')
+        self.add_button = QPushButton("Add Product")
         self.add_button.clicked.connect(self.add_product)
         self.product_management_layout.addWidget(self.add_button)
 
-        self.delete_button = QPushButton('Delete Selected Product')
+        self.delete_button = QPushButton("Delete Selected Product")
         self.delete_button.clicked.connect(self.delete_product)
         self.product_management_layout.addWidget(self.delete_button)
 
         # Placeholder for Optimization button (Gurobi integration)
-        self.optimize_button = QPushButton('Optimize Production Plan')
+        self.optimize_button = QPushButton("Optimize Production Plan")
         self.optimize_button.clicked.connect(self.optimize_production_plan)
         self.product_management_layout.addWidget(self.optimize_button)
 
     def setup_resource_table(self):
         self.resource_table = QTableWidget()
         self.resource_table.setColumnCount(2)
-        self.resource_table.setHorizontalHeaderLabels(['Resource Name', 'Quantity Available'])
+        self.resource_table.setHorizontalHeaderLabels(
+            ["Resource Name", "Quantity Available"]
+        )
         self.resource_management_layout.addWidget(self.resource_table)
 
     def manage_product_resources(self):
-        self.current_product = {"name": self.name_input.text(), "selling_price": self.selling_price_input.text(),
-                                "human_work_time": self.human_work_time_input.text(),
-                                "machine_time": self.machine_time_input.text(), "resources_needed": []}
+        self.current_product = {
+            "name": self.name_input.text(),
+            "selling_price": self.selling_price_input.text(),
+            "human_work_time": self.human_work_time_input.text(),
+            "machine_time": self.machine_time_input.text(),
+            "resources_needed": [],
+        }
         add_product(self.current_product)
         self.resources = load_resources()
         dialog = ResourceManagementDialog(self.resources, self.current_product)
@@ -131,17 +163,17 @@ class MainApp(QMainWindow):
         self.resource_name_input = QLineEdit()
         self.quantity_available_input = QLineEdit()
 
-        self.resource_form_layout.addWidget(QLabel('Resource Name:'))
+        self.resource_form_layout.addWidget(QLabel("Resource Name:"))
         self.resource_form_layout.addWidget(self.resource_name_input)
 
-        self.resource_form_layout.addWidget(QLabel('Quantity Available:'))
+        self.resource_form_layout.addWidget(QLabel("Quantity Available:"))
         self.resource_form_layout.addWidget(self.quantity_available_input)
 
-        self.add_resource_button = QPushButton('Add Resource')
+        self.add_resource_button = QPushButton("Add Resource")
         self.add_resource_button.clicked.connect(self.add_resource)
         self.resource_management_layout.addWidget(self.add_resource_button)
 
-        self.delete_resource_button = QPushButton('Delete Selected Resource')
+        self.delete_resource_button = QPushButton("Delete Selected Resource")
         self.delete_resource_button.clicked.connect(self.delete_resource)
         self.resource_management_layout.addWidget(self.delete_resource_button)
 
@@ -165,18 +197,30 @@ class MainApp(QMainWindow):
         row_position = self.product_table.rowCount()
         self.product_table.insertRow(row_position)
 
-        self.product_table.setItem(row_position, 0, QTableWidgetItem(self.name_input.text()))
-        self.product_table.setItem(row_position, 1, QTableWidgetItem(self.selling_price_input.text()))
-        self.product_table.setItem(row_position, 2, QTableWidgetItem(self.human_work_time_input.text()))
-        self.product_table.setItem(row_position, 3, QTableWidgetItem(self.machine_time_input.text()))
-        self.product_table.setItem(row_position, 4, QTableWidgetItem(self.resources_needed_input.text()))
+        self.product_table.setItem(
+            row_position, 0, QTableWidgetItem(self.name_input.text())
+        )
+        self.product_table.setItem(
+            row_position, 1, QTableWidgetItem(self.selling_price_input.text())
+        )
+        self.product_table.setItem(
+            row_position, 2, QTableWidgetItem(self.human_work_time_input.text())
+        )
+        self.product_table.setItem(
+            row_position, 3, QTableWidgetItem(self.machine_time_input.text())
+        )
+        self.product_table.setItem(
+            row_position, 4, QTableWidgetItem(self.resources_needed_input.text())
+        )
 
-        new_product = {"name": self.name_input.text(), "selling_price": self.selling_price_input.text(),
-                       "human_work_time": self.human_work_time_input.text(),
-                       "machine_time": self.machine_time_input.text(),
-                       # TODO: Change this to properly handle the different resources and their quantities
-                       # "resources_needed": self.resources_needed_input.text().split(',')
-                       }
+        new_product = {
+            "name": self.name_input.text(),
+            "selling_price": self.selling_price_input.text(),
+            "human_work_time": self.human_work_time_input.text(),
+            "machine_time": self.machine_time_input.text(),
+            # TODO: Change this to properly handle the different resources and their quantities
+            # "resources_needed": self.resources_needed_input.text().split(',')
+        }
         # TODO: We removed this to prevent the product being saved twice (here and when adding ressources). See if there's a better way
         # add_product(new_product)
 
@@ -191,11 +235,17 @@ class MainApp(QMainWindow):
     def add_resource(self):
         row_position = self.resource_table.rowCount()
         self.resource_table.insertRow(row_position)
-        self.resource_table.setItem(row_position, 0, QTableWidgetItem(self.resource_name_input.text()))
-        self.resource_table.setItem(row_position, 1, QTableWidgetItem(self.quantity_available_input.text()))
+        self.resource_table.setItem(
+            row_position, 0, QTableWidgetItem(self.resource_name_input.text())
+        )
+        self.resource_table.setItem(
+            row_position, 1, QTableWidgetItem(self.quantity_available_input.text())
+        )
 
-        new_resource = {"name": self.resource_name_input.text(),
-                        "quantity_available": self.quantity_available_input.text()}
+        new_resource = {
+            "name": self.resource_name_input.text(),
+            "quantity_available": self.quantity_available_input.text(),
+        }
         add_resource(new_resource)
         self.resource_name_input.clear()
         self.quantity_available_input.clear()
@@ -213,10 +263,12 @@ class MainApp(QMainWindow):
     def optimize_production_plan(self):
         # Here we will collect data from the table and use Gurobi for optimization.
         # This function currently serves as a placeholder.
-        print("Optimization placeholder. This is where the Gurobi optimization logic will be implemented.")
+        print(
+            "Optimization placeholder. This is where the Gurobi optimization logic will be implemented."
+        )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = QApplication(sys.argv)
     main_app = MainApp()
     main_app.show()
