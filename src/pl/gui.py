@@ -1,7 +1,8 @@
 import sys
 
 from PyQt5.QtWidgets import (QApplication, QMainWindow, QWidget, QVBoxLayout, QTableWidget, QTableWidgetItem,
-                             QPushButton, QHBoxLayout, QLineEdit, QLabel, QTabWidget, QHeaderView, QDialog, )
+                             QPushButton, QHBoxLayout, QLineEdit, QLabel, QTabWidget, QHeaderView, QDialog,
+                             QDoubleSpinBox, QSpinBox, )
 
 from src.pl.ResourceManagementDialog import ResourceManagementDialog
 from src.pl.optimizer import PlOptimizer
@@ -11,6 +12,7 @@ from src.pl.read_files import load_products, load_resources, add_product, add_re
 class MainApp(QMainWindow):
     def __init__(self):
         super().__init__()
+
         self.product_columns = ["Name", "Selling Price", "Human Work Time", "Machine Time", ]
         self.products = load_products()
         self.resources = load_resources()
@@ -25,7 +27,6 @@ class MainApp(QMainWindow):
         self.resource_management_tab = QWidget()
         self.tab_widget.addTab(self.product_management_tab, "Product Management")
         self.tab_widget.addTab(self.resource_management_tab, "Resource Management")
-
         # Initialize UI Components for Each Tab
         self.setup_product_management_tab()
         self.setup_resource_management_tab()
@@ -45,11 +46,12 @@ class MainApp(QMainWindow):
         # Convert numerical values to strings before setting them as table items
         self.resource_table.setItem(row_position, 0, QTableWidgetItem(resource["name"]))
         self.resource_table.setItem(row_position, 1, QTableWidgetItem(str(resource["quantity_available"])))
-        
+
     def setup_product_management_tab(self):
         self.product_management_layout = QVBoxLayout(self.product_management_tab)
         self.setup_product_table()
         self.setup_product_form()
+        self.update_button_state(self.product_fields, self.add_button, "Please fill in all fields to add a product.")
 
     def setup_product_table(self):
         self.product_table = QTableWidget()
@@ -70,11 +72,20 @@ class MainApp(QMainWindow):
 
         # Form fields
         self.name_input = QLineEdit()
-        self.selling_price_input = QLineEdit()
-        self.cost_input = QLineEdit()
-        self.human_work_time_input = QLineEdit()
-        self.machine_time_input = QLineEdit()
-        self.resources_needed_input = QLineEdit()
+        self.selling_price_input = QDoubleSpinBox()
+        self.selling_price_input.setMaximum(999999.99)
+        self.human_work_time_input = QSpinBox()
+        self.human_work_time_input.setMaximum(999999)
+        self.machine_time_input = QSpinBox()
+        self.machine_time_input.setMaximum(999999)
+
+        self.product_fields = [self.name_input, self.selling_price_input, self.human_work_time_input,
+                               self.machine_time_input]
+
+        # Connect each field's textChanged signal
+        for field in self.product_fields:
+            field.textChanged.connect(lambda: self.update_button_state(self.product_fields, self.add_button,
+                                                                       "Please fill in all fields to add a product."))
 
         self.product_form_layout.addWidget(QLabel("Name:"))
         self.product_form_layout.addWidget(self.name_input)
@@ -128,7 +139,13 @@ class MainApp(QMainWindow):
         self.resource_management_layout.addLayout(self.resource_form_layout)
 
         self.resource_name_input = QLineEdit()
-        self.quantity_available_input = QLineEdit()
+        self.quantity_available_input = QSpinBox()
+        self.quantity_available_input.setMaximum(99999999)
+        self.resource_fields = [self.resource_name_input, self.quantity_available_input]
+
+        for field in self.resource_fields:
+            field.textChanged.connect(lambda: self.update_button_state(self.resource_fields, self.add_resource_button,
+                                                                       "Please enter a valid name and quantity to add a resource."))
 
         self.resource_form_layout.addWidget(QLabel("Resource Name:"))
         self.resource_form_layout.addWidget(self.resource_name_input)
@@ -139,6 +156,8 @@ class MainApp(QMainWindow):
         self.add_resource_button = QPushButton("Add Resource")
         self.add_resource_button.clicked.connect(self.add_resource)
         self.resource_management_layout.addWidget(self.add_resource_button)
+        self.update_button_state(self.resource_fields, self.add_resource_button,
+                                 "Please enter a valid name and quantity to add a resource.")
 
         self.delete_resource_button = QPushButton("Delete Selected Resource")
         self.delete_resource_button.clicked.connect(self.delete_resource)
@@ -168,7 +187,6 @@ class MainApp(QMainWindow):
         self.product_table.setItem(row_position, 1, QTableWidgetItem(self.selling_price_input.text()))
         self.product_table.setItem(row_position, 2, QTableWidgetItem(self.human_work_time_input.text()))
         self.product_table.setItem(row_position, 3, QTableWidgetItem(self.machine_time_input.text()))
-        self.product_table.setItem(row_position, 4, QTableWidgetItem(self.resources_needed_input.text()))
 
         new_product = {"name": self.name_input.text(), "selling_price": self.selling_price_input.text(),
                        "human_work_time": self.human_work_time_input.text(),
@@ -182,10 +200,8 @@ class MainApp(QMainWindow):
         # Clear input fields after adding
         self.name_input.clear()
         self.selling_price_input.clear()
-        self.cost_input.clear()
         self.human_work_time_input.clear()
         self.machine_time_input.clear()
-        self.resources_needed_input.clear()
 
     def add_resource(self):
         row_position = self.resource_table.rowCount()
@@ -208,6 +224,19 @@ class MainApp(QMainWindow):
         indices = self.product_table.selectionModel().selectedRows()
         for index in sorted(indices, reverse=True):
             self.product_table.removeRow(index.row())
+
+    def update_button_state(self, fields, button, tooltip_message):
+        # Check if all the fields are non-empty
+        is_all_fields_non_empty = all(field.text().strip() for field in fields)
+
+        # Enable the button if all fields are non-empty, else disable it
+        button.setEnabled(is_all_fields_non_empty)
+
+        # Update tooltip based on the button's enabled state
+        if not button.isEnabled():
+            button.setToolTip(tooltip_message)
+        else:
+            button.setToolTip("")  # Clear tooltip when the button is enabled
 
     def optimize_production_plan(self):
         pl_optimizer = PlOptimizer()
