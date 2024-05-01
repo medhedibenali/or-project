@@ -189,10 +189,10 @@ class MainApp(QMainWindow):
         self.product_table.setItem(row_position, 2, QTableWidgetItem(self.human_work_time_input.text()))
         self.product_table.setItem(row_position, 3, QTableWidgetItem(self.machine_time_input.text()))
 
-        new_product = {"name": self.name_input.text(), "selling_price": self.selling_price_input.text(),
-                       "human_work_time": self.human_work_time_input.text(),
-                       "machine_time": self.machine_time_input.text(), }
         # FIXME: We removed this to prevent the product being saved twice (here and when adding ressources). See if there's a better way
+        # new_product = {"name": self.name_input.text(), "selling_price": self.selling_price_input.text(),
+        #                "human_work_time": self.human_work_time_input.text(),
+        #                "machine_time": self.machine_time_input.text(), }
         # add_product(new_product)
 
         # Clear input fields after adding

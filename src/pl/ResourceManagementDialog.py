@@ -1,5 +1,4 @@
-from PyQt5.QtWidgets import (QDialog, QVBoxLayout, QTableWidget, QPushButton, QHBoxLayout, QComboBox, QLineEdit,
-                             QSpinBox, )
+from PyQt5.QtWidgets import (QDialog, QVBoxLayout, QTableWidget, QPushButton, QHBoxLayout, QComboBox, QSpinBox)
 
 from src.pl.read_files import add_resource_to_product
 

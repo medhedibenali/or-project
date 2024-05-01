@@ -1,4 +1,5 @@
 from typing import List, Set
+
 import gurobipy as gp
 from gurobipy import GRB
 
@@ -22,9 +23,7 @@ class PlneOptimizer:
         self.verify_node(finish, "finish")
 
         if start == finish:
-            raise InitializationException(
-                "The finish can't be the same as the start.", "finish"
-            )
+            raise InitializationException("The finish can't be the same as the start.", "finish")
 
         self.start = start
         self.finish = finish
@@ -38,48 +37,27 @@ class PlneOptimizer:
         self.model.optimize()
 
         if self.model.Status != GRB.OPTIMAL:
-            raise OptimizationException(
-                "Could not find a path from the start to the finish with the given graph."
-            )
+            raise OptimizationException("Could not find a path from the start to the finish with the given graph.")
 
         return self.get_result()
 
     def prepare_model(self):
         self.x = self.model.addVars(self.edges_count, vtype=GRB.BINARY, name="edge")
-        self.y = self.model.addVars(
-            self.nodes_count - 2, vtype=GRB.BINARY, name="visit"
-        )
+        self.y = self.model.addVars(self.nodes_count - 2, vtype=GRB.BINARY, name="visit")
 
-        self.model.setObjective(
-            gp.quicksum(self.x[i] * self.costs[i] for i in range(self.edges_count)),
-            GRB.MINIMIZE,
-        )
+        self.model.setObjective(gp.quicksum(self.x[i] * self.costs[i] for i in range(self.edges_count)), GRB.MINIMIZE, )
+
+        self.model.addConstrs((gp.quicksum(self.x[i] for i in self.edges[j]) == 1 for j in range(2)), name="bound", )
 
         self.model.addConstrs(
-            (gp.quicksum(self.x[i] for i in self.edges[j]) == 1 for j in range(2)),
-            name="bound",
-        )
-
-        self.model.addConstrs(
-            (
-                (
-                    (self.y[j - 2] == k)
-                    >> (gp.quicksum(self.x[i] for i in self.edges[j]) == 2 * k)
-                )
-                for j in range(2, self.nodes_count)
-                for k in range(2)
-            ),
-            name="middle",
-        )
+            (((self.y[j - 2] == k) >> (gp.quicksum(self.x[i] for i in self.edges[j]) == 2 * k)) for j in
+             range(2, self.nodes_count) for k in range(2)), name="middle", )
 
     def get_result(self):
         self.objective_value = self.model.ObjVal
 
-        self.path_edges = {
-            i
-            for (i, x) in enumerate(self.model.getVars())
-            if x.varName.startswith("edge") and (x.X == 1)
-        }
+        self.path_edges = {i for (i, x) in enumerate(self.model.getVars()) if
+                           x.varName.startswith("edge") and (x.X == 1)}
 
         self.path_edges_sorted = []
         self.path_nodes = []
@@ -108,7 +86,7 @@ class PlneOptimizer:
 
         self.path_nodes.append(node)
 
-        return (self.objective_value, self.path_edges_sorted, self.path_nodes)
+        return self.objective_value, self.path_edges_sorted, self.path_nodes
 
     def initialize(self):
         self.indexes = {self.start: 0, self.finish: 1}
@@ -131,9 +109,7 @@ class PlneOptimizer:
 
                 self.costs.append(v)
             except ValueError:
-                raise InitializationException(
-                    "The cost must be a valid strictly positive number.", edge
-                )
+                raise InitializationException("The cost must be a valid strictly positive number.", edge)
 
             i = self.update_edges(node1, edge)
             j = self.update_edges(node2, edge)
@@ -145,7 +121,7 @@ class PlneOptimizer:
     def update_edges(self, node, edge):
         i = self.indexes.get(node)
 
-        if i == None:
+        if i is not None:
             i = self.nodes_count
             self.nodes_count += 1
             self.indexes[node] = i
@@ -157,26 +133,21 @@ class PlneOptimizer:
 
         return i
 
-    def verify_node(self, node, location):
+    @staticmethod
+    def verify_node(node, location):
         node_name = str(node)
         if (not node_name) or (node_name.strip() != node_name):
-            raise InitializationException(
-                "A node's name can't have extra spaces or be empty.", location
-            )
+            raise InitializationException("A node's name can't have extra spaces or be empty.", location)
 
     def update_nodes(self, node1, node2, edge):
         if node1 == node2:
-            raise InitializationException(
-                "Can't have an edge that links a node to itself.", edge
-            )
+            raise InitializationException("Can't have an edge that links a node to itself.", edge)
 
         if node2 < node1:
             (node1, node2) = (node2, node1)
 
         if node2 in self.nodes[node1]:
-            raise InitializationException(
-                "Can't have more than one edge that links two nodes together.", edge
-            )
+            raise InitializationException("Can't have more than one edge that links two nodes together.", edge)
 
         self.nodes[node1].add(node2)
 
@@ -184,14 +155,7 @@ class PlneOptimizer:
 if __name__ == "__main__":
     start = "start"
     finish = "finish"
-    graph = [
-        ("start", 2, 3),
-        (2, "finish", 5),
-        ("start", "finish", 10),
-        (2, 4, 1),
-        (4, 5, 1),
-        (5, "finish", 1),
-    ]
+    graph = [("start", 2, 3), (2, "finish", 5), ("start", "finish", 10), (2, 4, 1), (4, 5, 1), (5, "finish", 1), ]
 
     try:
         optimizer = PlneOptimizer(start, finish, graph)
