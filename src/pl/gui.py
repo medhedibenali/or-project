@@ -13,7 +13,7 @@ class MainApp(QMainWindow):
     def __init__(self):
         super().__init__()
 
-        self.product_columns = ["Name", "Selling Price", "Human Work Time", "Machine Time", ]
+        self.product_columns = ["Name", "Selling Price", "Human Work Time", "Machine Time"]
         self.products = load_products()
         self.resources = load_resources()
         self.current_product = None
@@ -27,6 +27,7 @@ class MainApp(QMainWindow):
         self.resource_management_tab = QWidget()
         self.tab_widget.addTab(self.product_management_tab, "Product Management")
         self.tab_widget.addTab(self.resource_management_tab, "Resource Management")
+
         # Initialize UI Components for Each Tab
         self.setup_product_management_tab()
         self.setup_resource_management_tab()
@@ -132,7 +133,7 @@ class MainApp(QMainWindow):
         dialog = ResourceManagementDialog(self.resources, self.current_product)
         if dialog.exec_() == QDialog.Accepted:
             # Gather data from dialog and update the product being added/edited
-            pass  # Example: update product['resources_needed'] based on dialog inputs
+            pass
 
     def setup_resource_form(self):
         self.resource_form_layout = QHBoxLayout()
@@ -190,11 +191,8 @@ class MainApp(QMainWindow):
 
         new_product = {"name": self.name_input.text(), "selling_price": self.selling_price_input.text(),
                        "human_work_time": self.human_work_time_input.text(),
-                       "machine_time": self.machine_time_input.text(),
-                       # TODO: Change this to properly handle the different resources and their quantities
-                       # "resources_needed": self.resources_needed_input.text().split(',')
-                       }
-        # TODO: We removed this to prevent the product being saved twice (here and when adding ressources). See if there's a better way
+                       "machine_time": self.machine_time_input.text(), }
+        # FIXME: We removed this to prevent the product being saved twice (here and when adding ressources). See if there's a better way
         # add_product(new_product)
 
         # Clear input fields after adding
@@ -225,7 +223,8 @@ class MainApp(QMainWindow):
         for index in sorted(indices, reverse=True):
             self.product_table.removeRow(index.row())
 
-    def update_button_state(self, fields, button, tooltip_message):
+    @staticmethod
+    def update_button_state(fields, button, tooltip_message):
         # Check if all the fields are non-empty
         is_all_fields_non_empty = all(field.text().strip() for field in fields)
 

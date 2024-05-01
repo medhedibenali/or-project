@@ -1,4 +1,5 @@
-from PyQt5.QtWidgets import (QDialog, QVBoxLayout, QTableWidget, QPushButton, QHBoxLayout, QComboBox, QLineEdit, )
+from PyQt5.QtWidgets import (QDialog, QVBoxLayout, QTableWidget, QPushButton, QHBoxLayout, QComboBox, QLineEdit,
+                             QSpinBox, )
 
 from src.pl.read_files import add_resource_to_product
 
@@ -60,7 +61,7 @@ class ResourceManagementDialog(QDialog):
         for resource in self.available_resources:
             combo_box.addItem(resource["name"], resource)
 
-        qty_input = QLineEdit()
+        qty_input = QSpinBox()
         remove_btn = QPushButton("Remove")
         remove_btn.clicked.connect(lambda: self.remove_resource_row(row_pos))
 
@@ -70,16 +71,3 @@ class ResourceManagementDialog(QDialog):
 
     def remove_resource_row(self, row_pos):
         self.resources_table.removeRow(row_pos)
-
-    def get_resource_data(self):
-        resource_data = []
-        for row in range(self.resources_table.rowCount()):
-            resource_combo = self.resources_table.cellWidget(row, 0)
-            qty_input = self.resources_table.cellWidget(row, 1)
-
-            resource = self.available_resources[resource_combo.currentIndex()]
-            quantity = qty_input.text()  # You might want to validate this input
-
-            resource_data.append({"resource_id": resource["id"], "quantity": quantity})
-            print(resource_data, resource)
-        return resource_data

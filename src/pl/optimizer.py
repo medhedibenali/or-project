@@ -17,7 +17,6 @@ class PlOptimizer:
     def setup_model(self):
         self.model = Model("Production Optimization")
         # Initialize decision variables
-
         x = []
         for i in self.products:
             x.append(self.model.addVar(lb=0, vtype=GRB.CONTINUOUS, name=i['name']))
@@ -36,8 +35,6 @@ class PlOptimizer:
             self.products[i]["machine_time"] * x[i] for i in range(len(self.products))) <= 16 * 60 * self.nb_machines,
                              "MachineTimeLimit")
 
-        # TODO: See how to add the ressources constraint
-        # model.addConstrs((quicksum(products[i]["ressources_needed"])))
         for resource in self.resources:
             available_quantity = resource["quantity_available"]
             resource_name = resource["name"]
