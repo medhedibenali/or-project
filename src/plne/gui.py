@@ -13,7 +13,7 @@ from PyQt5.QtWidgets import (
     QVBoxLayout,
     QWidget,
     QHBoxLayout,
-    QScrollArea,
+    QScrollArea, QTextEdit,
 )
 
 
@@ -160,6 +160,28 @@ class MainWindow(QMainWindow):
         self.add_node_pair_button.clicked.connect(self.add_node_pair)
         self.calculate_button.clicked.connect(self.calculate_shortest_path)
 
+        self.result_container = QWidget()
+        self.result_layout = QVBoxLayout()
+        self.result_container.setLayout(self.result_layout)
+        self.result_layout.setAlignment(Qt.AlignTop)
+        self.result_container.setStyleSheet(
+            "background-color: %s; border: none;" % NODE_PAIR_BACKGROUND_COLOR
+        )
+
+        self.result_label = QLabel()
+        self.result_label.setText("Result:")
+        self.result_label.setFont(QFont(FONT_TYPE, 14))
+        self.result_label.setStyleSheet("color: %s" % LABEL_COLOR)
+        self.result_layout.addWidget(self.result_label)
+        self.result_container.setFixedHeight(150)
+        layout.addWidget(self.result_container)
+
+        self.result_area = QTextEdit()
+        self.result_area.setReadOnly(True)  # Make it read-only
+        self.result_area.setFont(QFont(FONT_TYPE, 12))  # Set font
+        self.result_area.setStyleSheet("color: %s" % LABEL_COLOR)
+        self.result_layout.addWidget(self.result_area)  # Add result_area to result_layout
+
     def add_node_pair(self):
         node_pair_widget = NodePairWidget()
         self.node_pair_layout.addWidget(node_pair_widget)
@@ -200,23 +222,27 @@ class MainWindow(QMainWindow):
             optimizer = PlneOptimizer(source, dest, node_pairs)
 
             objective_value, edges, nodes = optimizer.optimize()
+
+            self.result_area.clear()
             print("\nobjective value: ", objective_value)
+            self.result_area.append(f"Objective value: {objective_value}")
 
             output = f"{edges[0]}"
-
             print("\nedges")
+            self.result_area.append("Edges:")
             for i in range(1, len(edges)):
                 output = f"{output} -> {edges[i]}"
-
             print(output)
+            self.result_area.append(output)
 
             output = f"{nodes[0]}"
-
             print("\nnodes")
+            self.result_area.append("Nodes:")
             for i in range(1, len(nodes)):
                 output = f"{output} -> {nodes[i]}"
-
             print(output)
+            self.result_area.append(output)
+
 
         except InitializationException as e:
             print(e, e.location)
@@ -241,7 +267,7 @@ LIGHT_BG_COLOR = "#fbfaee"
 def main():
     app = QApplication(sys.argv)
     window = MainWindow()
-    window.resize(800, 600)
+    window.resize(800, 700)
     window.setStyleSheet("background-color: %s;" % WINDOW_BACKGROUND_COLOR)
 
     window.show()
