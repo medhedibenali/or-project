@@ -1,26 +1,38 @@
 [
-    {
-        "name": "Resource 1",
-        "quantity_available": "100"
-    },
-    {
-        "name": "Resource 2",
-        "quantity_available": "200"
-    },
-    {
-        "name": "hdid",
-        "quantity_available": "20"
-    },
-    {
-        "name": "bois",
-        "quantity_available": "99"
-    },
-    {
-        "name": "chleka",
-        "quantity_available": "9999"
-    },
-    {
-        "name": "resource_tefha",
-        "quantity_available": "10"
-    }
+  {
+    "name": "Processor",
+    "quantity_available": "500"
+  },
+  {
+    "name": "Screen",
+    "quantity_available": "600"
+  },
+  {
+    "name": "Battery",
+    "quantity_available": "800"
+  },
+  {
+    "name": "Camera Module",
+    "quantity_available": "400"
+  },
+  {
+    "name": "Keyboard",
+    "quantity_available": "300"
+  },
+  {
+    "name": "RAM",
+    "quantity_available": "700"
+  },
+  {
+    "name": "Strap",
+    "quantity_available": "1000"
+  },
+  {
+    "name": "Speaker",
+    "quantity_available": "1500"
+  },
+  {
+    "name": "Casing",
+    "quantity_available": "1200"
+  }
 ]

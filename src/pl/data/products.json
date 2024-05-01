@@ -1,102 +1,118 @@
 [
-    {
-        "name": "younes",
-        "selling_price": "20",
-        "human_work_time": "60",
-        "machine_time": "90",
-        "resources_needed": [
-            {
-                "name": "Resource 1",
-                "quantity": "20"
-            }
-        ]
-    },
-    {
-        "name": "salma",
-        "selling_price": "100",
-        "human_work_time": "90",
-        "machine_time": "80",
-        "resources_needed": [
-            {
-                "name": "Resource 1",
-                "quantity": "1"
-            },
-            {
-                "name": "Resource 2",
-                "quantity": "2"
-            }
-        ]
-    },
-    {
-        "name": "donia",
-        "selling_price": "50",
-        "human_work_time": "90",
-        "machine_time": "60",
-        "resources_needed": [
-            {
-                "name": "Resource 1",
-                "quantity": "90"
-            },
-            {
-                "name": "Resource 2",
-                "quantity": "170"
-            }
-        ]
-    },
-    {
-        "name": "hedi",
-        "selling_price": "200",
-        "human_work_time": "50",
-        "machine_time": "400",
-        "resources_needed": [
-            {
-                "name": "Resource 2",
-                "quantity": "90"
-            },
-            {
-                "name": "Resource 1",
-                "quantity": "50"
-            }
-        ]
-    },
-    {
-        "name": "biden",
-        "selling_price": "0",
-        "human_work_time": "0",
-        "machine_time": "0",
-        "resources_needed": [
-            {
-                "name": "Resource 2",
-                "quantity": "90"
-            }
-        ]
-    },
-    {
-        "name": "trump",
-        "selling_price": "0",
-        "human_work_time": "0",
-        "machine_time": "99999999",
-        "resources_needed": [
-            {
-                "name": "chleka",
-                "quantity": "9999999999999"
-            },
-            {
-                "name": "Resource 1",
-                "quantity": "96"
-            }
-        ]
-    },
-    {
-        "name": "product tyefeh",
-        "selling_price": "100000",
-        "human_work_time": "0",
-        "machine_time": "20",
-        "resources_needed": [
-            {
-                "name": "resource_tefha",
-                "quantity": "9999999999"
-            }
-        ]
-    }
+  {
+    "name": "Smartphone A1",
+    "selling_price": "350",
+    "human_work_time": "30",
+    "machine_time": "15",
+    "resources_needed": [
+      {
+        "name": "Processor",
+        "quantity": "1"
+      },
+      {
+        "name": "Screen",
+        "quantity": "1"
+      },
+      {
+        "name": "Battery",
+        "quantity": "1"
+      },
+      {
+        "name": "Camera Module",
+        "quantity": "2"
+      }
+    ]
+  },
+  {
+    "name": "Laptop L1",
+    "selling_price": "800",
+    "human_work_time": "45",
+    "machine_time": "30",
+    "resources_needed": [
+      {
+        "name": "Processor",
+        "quantity": "1"
+      },
+      {
+        "name": "Screen",
+        "quantity": "1"
+      },
+      {
+        "name": "Battery",
+        "quantity": "1"
+      },
+      {
+        "name": "Keyboard",
+        "quantity": "1"
+      },
+      {
+        "name": "RAM",
+        "quantity": "2"
+      }
+    ]
+  },
+  {
+    "name": "Tablet T1",
+    "selling_price": "450",
+    "human_work_time": "25",
+    "machine_time": "20",
+    "resources_needed": [
+      {
+        "name": "Processor",
+        "quantity": "1"
+      },
+      {
+        "name": "Screen",
+        "quantity": "1"
+      },
+      {
+        "name": "Battery",
+        "quantity": "1"
+      }
+    ]
+  },
+  {
+    "name": "Smartwatch W1",
+    "selling_price": "200",
+    "human_work_time": "15",
+    "machine_time": "10",
+    "resources_needed": [
+      {
+        "name": "Processor",
+        "quantity": "1"
+      },
+      {
+        "name": "Screen",
+        "quantity": "1"
+      },
+      {
+        "name": "Battery",
+        "quantity": "1"
+      },
+      {
+        "name": "Strap",
+        "quantity": "1"
+      }
+    ]
+  },
+  {
+    "name": "Earbuds B1",
+    "selling_price": "150",
+    "human_work_time": "10",
+    "machine_time": "5",
+    "resources_needed": [
+      {
+        "name": "Speaker",
+        "quantity": "2"
+      },
+      {
+        "name": "Battery",
+        "quantity": "2"
+      },
+      {
+        "name": "Casing",
+        "quantity": "2"
+      }
+    ]
+  }
 ]
