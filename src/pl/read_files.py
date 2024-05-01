@@ -71,3 +71,17 @@ def add_resource_to_product(product_name, resource_name, quantity):
             break  # Stop the loop once the product is found and updated
 
     save_json_data(PRODUCTS_FILE_PATH, products)
+
+
+def delete_item_from_json(file_path, item_name):
+    items = load_json_data(file_path)
+    items = [item for item in items if item.get('name') != item_name]
+    save_json_data(file_path, items)
+
+
+def delete_resource_from_json(resource_name):
+    delete_item_from_json(RESOURCES_FILE_PATH, resource_name)
+
+
+def delete_product_from_json(product_name):
+    delete_item_from_json(PRODUCTS_FILE_PATH, product_name)
