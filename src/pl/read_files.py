@@ -20,7 +20,14 @@ def save_json_data(file_path, data):
 
 def add_data_item(file_path, new_item):
     data = load_json_data(file_path)
-    data.append(new_item)
+    item_index = next((index for (index, d) in enumerate(data) if d['name'] == new_item['name']), None)
+
+    if item_index is not None:
+        # If item exists, update it
+        data[item_index] = new_item
+    else:
+        # If item does not exist, append it
+        data.append(new_item)
     save_json_data(file_path, data)
 
 

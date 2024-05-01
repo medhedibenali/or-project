@@ -1,12 +1,4 @@
-from PyQt5.QtWidgets import (
-    QDialog,
-    QVBoxLayout,
-    QTableWidget,
-    QPushButton,
-    QHBoxLayout,
-    QComboBox,
-    QLineEdit,
-)
+from PyQt5.QtWidgets import (QDialog, QVBoxLayout, QTableWidget, QPushButton, QHBoxLayout, QComboBox, QLineEdit, )
 
 from src.pl.read_files import add_resource_to_product
 
@@ -24,9 +16,7 @@ class ResourceManagementDialog(QDialog):
         # Table for adding/removing resources and specifying quantities
         self.resources_table = QTableWidget()
         self.resources_table.setColumnCount(3)
-        self.resources_table.setHorizontalHeaderLabels(
-            ["Resource", "Quantity", "Remove"]
-        )
+        self.resources_table.setHorizontalHeaderLabels(["Resource", "Quantity", "Remove"])
         layout.addWidget(self.resources_table)
 
         # Button to add a new row to specify a resource
@@ -58,12 +48,7 @@ class ResourceManagementDialog(QDialog):
                 quantity = qty_input.text()
 
                 # Append new resource data to the product's resources_needed
-                add_resource_to_product(
-                    self.current_product["name"], resource_name, quantity
-                )
-                print(
-                    self.current_product
-                )  # add_product(self.current_product)  # Save the entire updated product list
+                add_resource_to_product(self.current_product["name"], resource_name, quantity)
 
         self.accept()  # Close the dialog
 
