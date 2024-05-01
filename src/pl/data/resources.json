@@ -1,38 +1,38 @@
 [
   {
     "name": "Processor",
-    "quantity_available": "500"
+    "quantity_available": 1000
   },
   {
     "name": "Screen",
-    "quantity_available": "600"
+    "quantity_available": 1000
   },
   {
     "name": "Battery",
-    "quantity_available": "800"
+    "quantity_available": 1500
   },
   {
     "name": "Camera Module",
-    "quantity_available": "400"
+    "quantity_available": 800
   },
   {
     "name": "Keyboard",
-    "quantity_available": "300"
+    "quantity_available": 500
   },
   {
     "name": "RAM",
-    "quantity_available": "700"
+    "quantity_available": 600
   },
   {
     "name": "Strap",
-    "quantity_available": "1000"
+    "quantity_available": 1200
   },
   {
     "name": "Speaker",
-    "quantity_available": "1500"
+    "quantity_available": 1600
   },
   {
     "name": "Casing",
-    "quantity_available": "1200"
+    "quantity_available": 1500
   }
 ]

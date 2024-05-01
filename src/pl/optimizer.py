@@ -9,8 +9,8 @@ class PlOptimizer:
         self.resources = load_resources()
 
         # TODO: Change this to read from file
-        self.nb_employees = 160
-        self.nb_machines = 50
+        self.nb_employees = 200
+        self.nb_machines = 100
 
         self.model = None
 
@@ -29,14 +29,24 @@ class PlOptimizer:
         # Human work time constraint
         self.model.addConstr(quicksum(
             self.products[i]["human_work_time"] * x[i] for i in range(len(self.products))) <= 8 * self.nb_employees,
-            "HumanWorkTimeLimit")
+                             "HumanWorkTimeLimit")
 
         # Machine time constraint
         self.model.addConstr(quicksum(
             self.products[i]["machine_time"] * x[i] for i in range(len(self.products))) <= 16 * 60 * self.nb_machines,
-            "MachineTimeLimit")
+                             "MachineTimeLimit")
 
-        # TODO: See how to add the ressources constraint  # model.addConstrs((quicksum(products[i]["ressources_needed"])))
+        # TODO: See how to add the ressources constraint
+        # model.addConstrs((quicksum(products[i]["ressources_needed"])))
+        for resource in self.resources:
+            available_quantity = resource["quantity_available"]
+            resource_name = resource["name"]
+
+            # Sum the usage across all products for this resource
+            total_usage = quicksum(x[i] * (
+                next((res["quantity"] for res in self.products[i]["resources_needed"] if res["name"] == resource_name),
+                     0)) for i in range(len(self.products)))
+            self.model.addConstr(total_usage <= available_quantity, f"resource_limit_{resource_name}")
 
     def optimize(self):
         if not self.model:
@@ -64,5 +74,5 @@ class PlOptimizer:
 
 
 if __name__ == "__main__":
-    opt_manager = PlOPtimizer()
+    opt_manager = PlOptimizer()
     opt_manager.run_optimization()

@@ -34,20 +34,18 @@ class MainApp(QMainWindow):
     def add_product_to_table(self, product):
         row_position = self.product_table.rowCount()
         self.product_table.insertRow(row_position)
-        print(product)
-        # Assuming product dictionary has keys corresponding to table columns
         self.product_table.setItem(row_position, 0, QTableWidgetItem(product["name"]))
-        self.product_table.setItem(row_position, 1, QTableWidgetItem(product["selling_price"]))
-        self.product_table.setItem(row_position, 2, QTableWidgetItem(product["human_work_time"]))
-        self.product_table.setItem(row_position, 3, QTableWidgetItem(product["machine_time"]))
+        self.product_table.setItem(row_position, 1, QTableWidgetItem(str(product["selling_price"])))
+        self.product_table.setItem(row_position, 2, QTableWidgetItem(str(product["human_work_time"])))
+        self.product_table.setItem(row_position, 3, QTableWidgetItem(str(product["machine_time"])))
 
     def add_resource_to_table(self, resource):
         row_position = self.resource_table.rowCount()
         self.resource_table.insertRow(row_position)
-        # Assuming resource dictionary has keys corresponding to table columns
+        # Convert numerical values to strings before setting them as table items
         self.resource_table.setItem(row_position, 0, QTableWidgetItem(resource["name"]))
-        self.resource_table.setItem(row_position, 1, QTableWidgetItem(resource["quantity_available"]))
-
+        self.resource_table.setItem(row_position, 1, QTableWidgetItem(str(resource["quantity_available"])))
+        
     def setup_product_management_tab(self):
         self.product_management_layout = QVBoxLayout(self.product_management_tab)
         self.setup_product_table()
@@ -116,8 +114,8 @@ class MainApp(QMainWindow):
 
     def manage_product_resources(self):
         self.current_product = {"name": self.name_input.text(), "selling_price": self.selling_price_input.text(),
-            "human_work_time": self.human_work_time_input.text(), "machine_time": self.machine_time_input.text(),
-            "resources_needed": [], }
+                                "human_work_time": self.human_work_time_input.text(),
+                                "machine_time": self.machine_time_input.text(), "resources_needed": [], }
         add_product(self.current_product)
         self.resources = load_resources()
         dialog = ResourceManagementDialog(self.resources, self.current_product)
@@ -173,10 +171,11 @@ class MainApp(QMainWindow):
         self.product_table.setItem(row_position, 4, QTableWidgetItem(self.resources_needed_input.text()))
 
         new_product = {"name": self.name_input.text(), "selling_price": self.selling_price_input.text(),
-            "human_work_time": self.human_work_time_input.text(), "machine_time": self.machine_time_input.text(),
-            # TODO: Change this to properly handle the different resources and their quantities
-            # "resources_needed": self.resources_needed_input.text().split(',')
-        }
+                       "human_work_time": self.human_work_time_input.text(),
+                       "machine_time": self.machine_time_input.text(),
+                       # TODO: Change this to properly handle the different resources and their quantities
+                       # "resources_needed": self.resources_needed_input.text().split(',')
+                       }
         # TODO: We removed this to prevent the product being saved twice (here and when adding ressources). See if there's a better way
         # add_product(new_product)
 
@@ -195,7 +194,7 @@ class MainApp(QMainWindow):
         self.resource_table.setItem(row_position, 1, QTableWidgetItem(self.quantity_available_input.text()))
 
         new_resource = {"name": self.resource_name_input.text(),
-            "quantity_available": self.quantity_available_input.text(), }
+                        "quantity_available": self.quantity_available_input.text(), }
         add_resource(new_resource)
         self.resource_name_input.clear()
         self.quantity_available_input.clear()
