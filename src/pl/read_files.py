@@ -1,14 +1,17 @@
 import json
+import os
 
-PRODUCTS_FILE_PATH = "data/products.json"
-RESOURCES_FILE_PATH = "data/resources.json"
+dir_path = os.path.dirname(os.path.realpath(__file__))  # Path to the directory of the current file
+PRODUCTS_FILE_PATH = os.path.join(dir_path, "data/products.json")
+RESOURCES_FILE_PATH = os.path.join(dir_path, "data/resources.json")
 
 
 def load_json_data(file_path):
     try:
         with open(file_path, "r") as file:
             return json.load(file)
-    except (FileNotFoundError, json.JSONDecodeError):
+    except (FileNotFoundError, json.JSONDecodeError) as ex:
+        print(f"Error reading {file_path}: {ex}")
         # If the file does not exist or is empty/corrupted, start with an empty list
         return []
 
