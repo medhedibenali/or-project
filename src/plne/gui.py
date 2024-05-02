@@ -14,6 +14,7 @@ class NodePairWidget(QWidget):
 
         layout = QHBoxLayout()
 
+
         self.node1_label = QLabel("Node 1:")
         self.node1_input = QLineEdit()
         self.node1_label.setFont(QFont(Styles.FONT_TYPE, 12))

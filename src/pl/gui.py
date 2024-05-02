@@ -1,5 +1,6 @@
 import sys
 
+from PyQt5.QtGui import QFont
 from PyQt5.QtWidgets import (QApplication, QMainWindow, QWidget, QVBoxLayout, QTableWidget, QTableWidgetItem,
                              QPushButton, QHBoxLayout, QLineEdit, QLabel, QTabWidget, QHeaderView, QDialog,
                              QDoubleSpinBox, QSpinBox, )
@@ -7,11 +8,16 @@ from PyQt5.QtWidgets import (QApplication, QMainWindow, QWidget, QVBoxLayout, QT
 from src.pl.ResourceManagementDialog import ResourceManagementDialog
 from src.pl.optimizer import PlOptimizer
 from src.pl.read_files import load_products, load_resources, add_product, add_resource
+from src.styles import Styles
 
 
 class MainApp(QMainWindow):
     def __init__(self):
         super().__init__()
+
+        self.font = QFont(Styles.FONT_TYPE)
+        self.setFont(self.font)
+
 
         self.product_columns = ["Name", "Selling Price", "Human Work Time", "Machine Time"]
         self.products = load_products()
