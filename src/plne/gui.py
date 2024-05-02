@@ -153,7 +153,7 @@ class MainWindow(QMainWindow):
         self.result_container.setStyleSheet("background-color: %s; border: none;" % Styles.NODE_PAIR_BACKGROUND_COLOR)
 
         self.result_label = QLabel()
-        self.result_label.setText("Result:")
+        self.result_label.setText("Output:")
         self.result_label.setFont(QFont(Styles.FONT_TYPE, 14))
         self.result_label.setStyleSheet("color: %s" % Styles.LABEL_COLOR)
         self.result_layout.addWidget(self.result_label)
@@ -227,8 +227,14 @@ class MainWindow(QMainWindow):
 
         except InitializationException as e:
             print(e, e.location)
+            self.result_area.clear()
+            self.result_area.append(f"Error: {e}")
+            self.result_area.append(f"At: {e.location}")
+
         except OptimizationException as e:
             print(e)
+            self.result_area.clear()
+            self.result_area.append(f"Error: {e}")
 
 
 
