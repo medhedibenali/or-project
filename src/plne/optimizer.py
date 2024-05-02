@@ -63,11 +63,11 @@ class PlneOptimizer:
         self.model.addConstrs(
             (
                 (
-                    (self.y[j - 2] == k)
-                    >> (gp.quicksum(self.x[i] for i in self.edges[j]) == 2 * k)
+                    ((self.y[j - 2] * 2) - 1)
+                    * gp.quicksum(self.x[i] for i in self.edges[j])
+                    == 2 * self.y[j - 2]
                 )
                 for j in range(2, self.nodes_count)
-                for k in range(2)
             ),
             name="middle",
         )
