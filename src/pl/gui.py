@@ -3,7 +3,7 @@ import sys
 from PyQt5.QtGui import QFont
 from PyQt5.QtWidgets import (QApplication, QMainWindow, QWidget, QVBoxLayout, QTableWidget, QTableWidgetItem,
                              QPushButton, QHBoxLayout, QLineEdit, QLabel, QTabWidget, QHeaderView, QDialog,
-                             QDoubleSpinBox, QSpinBox, )
+                             QDoubleSpinBox, QSpinBox)
 
 from src.pl.ResourceManagementDialog import ResourceManagementDialog
 from src.pl.optimizer import PlOptimizer
@@ -17,7 +17,6 @@ class MainApp(QMainWindow):
 
         self.font = QFont(Styles.FONT_TYPE)
         self.setFont(self.font)
-
 
         self.product_columns = ["Name", "Selling Price", "Human Work Time", "Machine Time"]
         self.products = load_products()
@@ -131,9 +130,9 @@ class MainApp(QMainWindow):
         self.resource_management_layout.addWidget(self.resource_table)
 
     def manage_product_resources(self):
-        self.current_product = {"name": self.name_input.text(), "selling_price": self.selling_price_input.text(),
-                                "human_work_time": self.human_work_time_input.text(),
-                                "machine_time": self.machine_time_input.text(), "resources_needed": [], }
+        self.current_product = {"name": self.name_input.text(), "selling_price": self.selling_price_input.value(),
+                                "human_work_time": self.human_work_time_input.value(),
+                                "machine_time": self.machine_time_input.value(), "resources_needed": [], }
         add_product(self.current_product)
         self.resources = load_resources()
         dialog = ResourceManagementDialog(self.resources, self.current_product)
@@ -191,9 +190,9 @@ class MainApp(QMainWindow):
         self.product_table.insertRow(row_position)
 
         self.product_table.setItem(row_position, 0, QTableWidgetItem(self.name_input.text()))
-        self.product_table.setItem(row_position, 1, QTableWidgetItem(self.selling_price_input.text()))
-        self.product_table.setItem(row_position, 2, QTableWidgetItem(self.human_work_time_input.text()))
-        self.product_table.setItem(row_position, 3, QTableWidgetItem(self.machine_time_input.text()))
+        self.product_table.setItem(row_position, 1, QTableWidgetItem(str(self.selling_price_input.value())))
+        self.product_table.setItem(row_position, 2, QTableWidgetItem(str(self.human_work_time_input.value())))
+        self.product_table.setItem(row_position, 3, QTableWidgetItem(str(self.machine_time_input.value())))
 
         # FIXME: We removed this to prevent the product being saved twice (here and when adding ressources). See if there's a better way
         # new_product = {"name": self.name_input.text(), "selling_price": self.selling_price_input.text(),
@@ -203,21 +202,22 @@ class MainApp(QMainWindow):
 
         # Clear input fields after adding
         self.name_input.clear()
-        self.selling_price_input.clear()
-        self.human_work_time_input.clear()
-        self.machine_time_input.clear()
+        self.selling_price_input.setValue(0)
+        self.human_work_time_input.setValue(0)
+        self.machine_time_input.setValue(0)
 
     def add_resource(self):
         row_position = self.resource_table.rowCount()
         self.resource_table.insertRow(row_position)
         self.resource_table.setItem(row_position, 0, QTableWidgetItem(self.resource_name_input.text()))
-        self.resource_table.setItem(row_position, 1, QTableWidgetItem(self.quantity_available_input.text()))
+        self.resource_table.setItem(row_position, 1,
+                                    QTableWidgetItem(str(self.quantity_available_input.value())))
 
         new_resource = {"name": self.resource_name_input.text(),
-                        "quantity_available": self.quantity_available_input.text(), }
+                        "quantity_available": self.quantity_available_input.value(), }
         add_resource(new_resource)
         self.resource_name_input.clear()
-        self.quantity_available_input.clear()
+        self.quantity_available_input.setValue(0)
 
     def delete_resource(self):
         indices = self.resource_table.selectionModel().selectedRows()

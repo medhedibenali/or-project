@@ -45,7 +45,7 @@ class ResourceManagementDialog(QDialog):
                 qty_input = self.resources_table.cellWidget(row, 1)
 
                 resource_name = resource_combo.currentText()
-                quantity = qty_input.text()
+                quantity = qty_input.value()
 
                 # Append new resource data to the product's resources_needed
                 add_resource_to_product(self.current_product["name"], resource_name, quantity)

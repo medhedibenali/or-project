@@ -56,14 +56,14 @@ def add_resource_to_product(product_name, resource_name, quantity):
     for product in products:
         if product["name"] == product_name:
             # Found the product, now add the resource
-            new_resource = {"name": resource_name, "quantity": str(quantity)}
+            new_resource = {"name": resource_name, "quantity": quantity}
 
             # Check if the resource already exists
             found = False
             for resource in product["resources_needed"]:
                 if resource["name"] == resource_name:
                     # Update quantity if resource exists
-                    resource["quantity"] = str(int(resource["quantity"]) + quantity)
+                    resource["quantity"] = (int(resource["quantity"]) + quantity)
                     found = True
                     break
 
