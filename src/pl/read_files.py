@@ -4,6 +4,8 @@ import os
 dir_path = os.path.dirname(os.path.realpath(__file__))  # Path to the directory of the current file
 PRODUCTS_FILE_PATH = os.path.join(dir_path, "data/products.json")
 RESOURCES_FILE_PATH = os.path.join(dir_path, "data/resources.json")
+HUMAN_MACHINE_TIME_FILE_PATH = os.path.join(dir_path, "data/human_machine_time.json")
+
 
 
 def load_json_data(file_path):
@@ -33,6 +35,11 @@ def add_data_item(file_path, new_item):
         data.append(new_item)
     save_json_data(file_path, data)
 
+def add_work_time_item(file_path, new_item):
+    data = load_json_data(file_path)
+    data.append(new_item)
+    save_json_data(file_path, data)
+
 
 def load_products():
     return load_json_data(PRODUCTS_FILE_PATH)
@@ -40,6 +47,8 @@ def load_products():
 
 def load_resources():
     return load_json_data(RESOURCES_FILE_PATH)
+def load_human_machine_time():
+    return load_json_data(HUMAN_MACHINE_TIME_FILE_PATH)
 
 
 def add_product(new_product):
@@ -48,6 +57,10 @@ def add_product(new_product):
 
 def add_resource(new_resource):
     add_data_item(RESOURCES_FILE_PATH, new_resource)
+
+def add_human_machine_time(new_resource):
+    add_work_time_item(HUMAN_MACHINE_TIME_FILE_PATH, new_resource)
+
 
 
 def add_resource_to_product(product_name, resource_name, quantity):
@@ -88,3 +101,6 @@ def delete_resource_from_json(resource_name):
 
 def delete_product_from_json(product_name):
     delete_item_from_json(PRODUCTS_FILE_PATH, product_name)
+
+def delete_human_machine_time_from_json(product_name):
+    delete_item_from_json(HUMAN_MACHINE_TIME_FILE_PATH,product_name)
