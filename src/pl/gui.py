@@ -7,7 +7,8 @@ from PyQt5.QtWidgets import (QApplication, QMainWindow, QWidget, QVBoxLayout, QT
 
 from src.pl.ResourceManagementDialog import ResourceManagementDialog
 from src.pl.optimizer import PlOptimizer
-from src.pl.read_files import load_products, load_resources, add_product, add_resource, load_human_machine_time,add_human_machine_time
+from src.pl.read_files import load_products, load_resources, add_product, add_resource, load_human_machine_time, \
+    add_human_machine_time
 from src.styles import Styles
 
 
@@ -20,7 +21,7 @@ class MainApp(QMainWindow):
 
         self.product_columns = ["Name", "Selling Price", "Human Work Time", "Machine Time"]
         self.products = load_products()
-        self.human_machine_time_columns = ["Human work time","Machine work time"]
+        self.human_machine_time_columns = ["Human work time", "Machine work time"]
         self.human_machine_time = load_human_machine_time()
         self.resources = load_resources()
         self.current_product = None
@@ -37,7 +38,6 @@ class MainApp(QMainWindow):
         self.tab_widget.addTab(self.resource_management_tab, "Resource Management")
         self.tab_widget.addTab(self.human_machine_time_management_tab, "Work time Management")
 
-
         # Initialize UI Components for Each Tab
         self.setup_product_management_tab()
         self.setup_resource_management_tab()
@@ -52,6 +52,7 @@ class MainApp(QMainWindow):
         self.product_table.setItem(row_position, 1, QTableWidgetItem(str(product["selling_price"])))
         self.product_table.setItem(row_position, 2, QTableWidgetItem(str(product["human_work_time"])))
         self.product_table.setItem(row_position, 3, QTableWidgetItem(str(product["machine_time"])))
+
     def add_human_machine_time_to_table(self, human_machine_time):
         row_position = self.product_table.rowCount()
         self.product_table.insertRow(row_position)
@@ -175,14 +176,15 @@ class MainApp(QMainWindow):
         self.add_button.clicked.connect(self.add_human_machine_time)
         self.human_machine_time_management_layout.addWidget(self.add_human_machine_button)
 
-        #self.delete_button = QPushButton("Delete")
-       # self.delete_button.clicked.connect(self.delete_human_machine_time)
-        #self.human_machine_time_management_layout.addWidget(self.delete_button)
+        # self.delete_button = QPushButton("Delete")
+        # self.delete_button.clicked.connect(self.delete_human_machine_time)
+        # self.human_machine_time_management_layout.addWidget(self.delete_button)
 
         # Placeholder for Optimization button (Gurobi integration)
         self.optimize_button = QPushButton("Optimize Production Plan")
         self.optimize_button.clicked.connect(self.optimize_production_plan)
         self.human_machine_time_management_layout.addWidget(self.optimize_button)
+
     def setup_resource_table(self):
         self.resource_table = QTableWidget()
         self.resource_table.setColumnCount(2)
@@ -270,8 +272,7 @@ class MainApp(QMainWindow):
         row_position = self.resource_table.rowCount()
         self.resource_table.insertRow(row_position)
         self.resource_table.setItem(row_position, 0, QTableWidgetItem(self.resource_name_input.text()))
-        self.resource_table.setItem(row_position, 1,
-                                    QTableWidgetItem(str(self.quantity_available_input.value())))
+        self.resource_table.setItem(row_position, 1, QTableWidgetItem(str(self.quantity_available_input.value())))
 
         new_resource = {"name": self.resource_name_input.text(),
                         "quantity_available": self.quantity_available_input.value(), }
@@ -283,14 +284,13 @@ class MainApp(QMainWindow):
         row_position = self.human_machine_table.rowCount()
         self.human_machine_table.insertRow(row_position)
         self.human_machine_table.setItem(row_position, 0, QTableWidgetItem(str(self.human_time_input.value())))
-        self.human_machine_table.setItem(row_position, 1,
-                                    QTableWidgetItem(str(self.machine_time_input.value())))
+        self.human_machine_table.setItem(row_position, 1, QTableWidgetItem(str(self.machine_time_input.value())))
 
-        new_resource = {"human_time": self.human_time_input.value(),
-                        "machine_time": self.machine_time_input.value(), }
+        new_resource = {"human_time": self.human_time_input.value(), "machine_time": self.machine_time_input.value()}
         add_human_machine_time(new_resource)
         self.human_time_input.clear()
         self.machine_time_input.setValue(0)
+
     def delete_resource(self):
         indices = self.resource_table.selectionModel().selectedRows()
         for index in sorted(indices, reverse=True):
@@ -325,12 +325,16 @@ class MainApp(QMainWindow):
         result_table = QTableWidget()
         result_table.setColumnCount(2)
         result_table.setHorizontalHeaderLabels(["Product", "Optimized Quantity"])
-        for product, quantity in optimized_plan.items():
+
+        result_table.setMinimumSize(400, 300)
+        result_dialog.setMinimumSize(450, 350)
+
+        sorted_optimized_plan = dict(sorted(optimized_plan.items(), key=lambda item: item[1], reverse=True))
+        for product, quantity in sorted_optimized_plan.items():
             row_position = result_table.rowCount()
             result_table.insertRow(row_position)
             result_table.setItem(row_position, 0, QTableWidgetItem(product))
-            result_table.setItem(row_position, 1, QTableWidgetItem(str(quantity)))
-
+            result_table.setItem(row_position, 1, QTableWidgetItem(f"{quantity:,.0f}"))
         result_layout.addWidget(result_table)
         result_layout.addWidget(QLabel(f"Total Projected Sales: ${total_sales:,.2f}"))
         result_dialog.setLayout(result_layout)

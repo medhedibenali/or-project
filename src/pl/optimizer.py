@@ -4,11 +4,12 @@ from src.pl.read_files import load_products, load_resources
 
 
 class PlOptimizer:
-    self.HUMAN_WORK_TIME = 8
-    self.MACHINE_WORK_TIME = 16
     def __init__(self):
         self.products = load_products()
         self.resources = load_resources()
+
+        self.HUMAN_WORK_TIME = 8
+        self.MACHINE_WORK_TIME = 16
 
         # TODO: Change this to read from file
         self.nb_employees = 200
@@ -28,13 +29,13 @@ class PlOptimizer:
                                 GRB.MAXIMIZE)
 
         # Human work time constraint
-        self.model.addConstr(quicksum(
-            self.products[i]["human_work_time"] * x[i] for i in range(len(self.products))) <= self.HUMAN_WORK_TIME * self.nb_employees,
+        self.model.addConstr(quicksum(self.products[i]["human_work_time"] * x[i] for i in
+                                      range(len(self.products))) <= self.HUMAN_WORK_TIME * self.nb_employees,
                              "HumanWorkTimeLimit")
 
         # Machine time constraint
-        self.model.addConstr(quicksum(
-            self.products[i]["machine_time"] * x[i] for i in range(len(self.products))) <= self.MACHINE_WORK_TIME * 60 * self.nb_machines,
+        self.model.addConstr(quicksum(self.products[i]["machine_time"] * x[i] for i in
+                                      range(len(self.products))) <= self.MACHINE_WORK_TIME * 60 * self.nb_machines,
                              "MachineTimeLimit")
 
         for resource in self.resources:
