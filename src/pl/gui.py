@@ -144,7 +144,6 @@ class MainApp(QMainWindow):
         self.delete_button.clicked.connect(self.delete_product)
         self.product_management_layout.addWidget(self.delete_button)
 
-        # Placeholder for Optimization button (Gurobi integration)
         self.optimize_button = QPushButton("Optimize Production Plan")
         self.optimize_button.clicked.connect(self.optimize_production_plan)
         self.product_management_layout.addWidget(self.optimize_button)
@@ -172,9 +171,9 @@ class MainApp(QMainWindow):
         self.human_machine_time_form_layout.addWidget(self.machine_time_input)
 
         # Add and Delete buttons
-        self.add_button = QPushButton('Set work time')
+        self.add_human_machine_button = QPushButton('Set work time')
         self.add_button.clicked.connect(self.add_human_machine_time)
-        self.human_machine_time_management_layout.addWidget(self.add_button)
+        self.human_machine_time_management_layout.addWidget(self.add_human_machine_button)
 
         #self.delete_button = QPushButton("Delete")
        # self.delete_button.clicked.connect(self.delete_human_machine_time)
