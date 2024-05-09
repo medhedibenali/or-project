@@ -1,6 +1,6 @@
 from gurobipy import *
 
-from src.pl.read_files import load_products, load_resources
+from src.pl.read_files import load_products, load_resources,load_human_machine_time
 
 
 class PlOptimizer:
@@ -12,8 +12,8 @@ class PlOptimizer:
         self.MACHINE_WORK_TIME = 16
 
         # TODO: Change this to read from file
-        self.nb_employees = 200
-        self.nb_machines = 100
+        self.nb_employees = load_human_machine_time()["human_time"]
+        self.nb_machines = load_human_machine_time()["machine_time"]
 
         self.model = None
 

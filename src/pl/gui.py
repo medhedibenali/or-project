@@ -20,7 +20,7 @@ class MainApp(QMainWindow):
 
         self.product_columns = ["Name", "Selling Price", "Human Work Time", "Machine Time"]
         self.products = load_products()
-        self.human_machine_time_columns = ["Human work time","Machine work time"]
+        self.human_machine_time_columns = ["Number of Employees","Number of Machines"]
         self.human_machine_time = load_human_machine_time()
         self.resources = load_resources()
         self.current_product = None
@@ -53,10 +53,10 @@ class MainApp(QMainWindow):
         self.product_table.setItem(row_position, 2, QTableWidgetItem(str(product["human_work_time"])))
         self.product_table.setItem(row_position, 3, QTableWidgetItem(str(product["machine_time"])))
     def add_human_machine_time_to_table(self, human_machine_time):
-        row_position = self.product_table.rowCount()
-        self.product_table.insertRow(row_position)
-        self.product_table.setItem(row_position, 0, QTableWidgetItem(str(human_machine_time["human_time"])))
-        self.product_table.setItem(row_position, 1, QTableWidgetItem(str(human_machine_time["machine_time"])))
+        row_position = 0
+        self.human_machine_table.insertRow(row_position)
+        self.human_machine_table.setItem(row_position, 0, QTableWidgetItem(str(human_machine_time["human_time"])))
+        self.human_machine_table.setItem(row_position, 1, QTableWidgetItem(str(human_machine_time["machine_time"])))
 
     def add_resource_to_table(self, resource):
         row_position = self.resource_table.rowCount()
@@ -156,6 +156,9 @@ class MainApp(QMainWindow):
         # Form fields
         self.human_time_input = QSpinBox()
         self.machine_time_input = QSpinBox()
+        self.human_time_input.setMaximum(999999)
+        self.machine_time_input.setMaximum(999999)
+
 
         self.human_machine_time_fields = [self.human_time_input, self.machine_time_input]
 
@@ -164,15 +167,15 @@ class MainApp(QMainWindow):
             field.textChanged.connect(lambda: self.update_button_state(self.human_machine_time_fields, self.add_button,
                                                                        "Please fill in all fields ."))
 
-        self.human_machine_time_form_layout.addWidget(QLabel("Human Work Time:"))
+        self.human_machine_time_form_layout.addWidget(QLabel("Number of employees:"))
         self.human_machine_time_form_layout.addWidget(self.human_time_input)
 
-        self.human_machine_time_form_layout.addWidget(QLabel("Machine work Time:"))
+        self.human_machine_time_form_layout.addWidget(QLabel("Number of machines:"))
         self.human_machine_time_form_layout.addWidget(self.machine_time_input)
 
         # Add and Delete buttons
-        self.add_human_machine_button = QPushButton('Set work time')
-        self.add_button.clicked.connect(self.add_human_machine_time)
+        self.add_human_machine_button = QPushButton('Set HR Reources')
+        self.add_human_machine_button.clicked.connect(self.add_human_machine_time)
         self.human_machine_time_management_layout.addWidget(self.add_human_machine_button)
 
         #self.delete_button = QPushButton("Delete")
@@ -232,6 +235,7 @@ class MainApp(QMainWindow):
     def load_data_into_ui(self):
         self.products = load_products()
         self.resources = load_resources()
+        self.human_machine_time=load_human_machine_time()
         print(self.products)
 
         # Clear existing rows in the tables
@@ -244,6 +248,7 @@ class MainApp(QMainWindow):
         # Populate resource table
         for resource in self.resources:
             self.add_resource_to_table(resource)
+        self.add_human_machine_time_to_table(self.human_machine_time)
 
     def add_product(self):
         row_position = self.product_table.rowCount()
@@ -280,7 +285,8 @@ class MainApp(QMainWindow):
         self.quantity_available_input.setValue(0)
 
     def add_human_machine_time(self):
-        row_position = self.human_machine_table.rowCount()
+        row_position = 0
+        self.human_machine_table.removeRow(0)
         self.human_machine_table.insertRow(row_position)
         self.human_machine_table.setItem(row_position, 0, QTableWidgetItem(str(self.human_time_input.value())))
         self.human_machine_table.setItem(row_position, 1,

@@ -37,7 +37,7 @@ def add_data_item(file_path, new_item):
 
 def add_work_time_item(file_path, new_item):
     data = load_json_data(file_path)
-    data.append(new_item)
+    data=new_item
     save_json_data(file_path, data)
 
 
