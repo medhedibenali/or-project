@@ -4,11 +4,12 @@ from src.pl.read_files import load_products, load_resources
 
 
 class PlOptimizer:
-    self.HUMAN_WORK_TIME = 8
-    self.MACHINE_WORK_TIME = 16
     def __init__(self):
         self.products = load_products()
         self.resources = load_resources()
+
+        self.HUMAN_WORK_TIME = 8
+        self.MACHINE_WORK_TIME = 16
 
         # TODO: Change this to read from file
         self.nb_employees = 200
